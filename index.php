@@ -6,8 +6,11 @@
     <meta name='description' content='USER MANAGEMENT SYSTEM'>
     <meta name='author' content='HIDRAN ARIAS'>
     <title>USER MANAGEMENT SYSTEM</title>
-
-
+    <link rel='icon' href='favicon.ico' type='image/png'>
+    <link rel="stylesheet" href="css/all.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet'>
+    <link href='fontawesome/css/all.min.css' rel='stylesheet'>
+    <link href='css/style.css' rel='stylesheet'>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet'>
 
 
@@ -25,7 +28,7 @@
     <!-- Fixed navbar -->
     <nav class='navbar navbar-expand-md navbar-dark fixed-top bg-dark'>
         <div class='container-fluid'>
-            <a class='navbar-brand' href='#'>Fixed navbar</a>
+            <a class='navbar-brand' href='#'> <i class='fas fa-users'></i></a>
             <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarCollapse'
                     aria-controls='navbarCollapse' aria-expanded='false' aria-label='Toggle navigation'>
                 <span class='navbar-toggler-icon'></span>
