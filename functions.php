@@ -7,6 +7,11 @@ function getConfig($param)
 
     return array_key_exists($param, $config) ? $config[$param] : null;
 }
+function getParam($param, $default = '')
+{
+
+    return $_REQUEST[$param] ?? $default;
+}
 function getRandName(): string
 {
     $names = [
@@ -106,4 +111,4 @@ function getUsers(array $params = [])
     return $records;
 }
 
-var_dump(getUsers());
+//var_dump(getUsers());
