@@ -98,7 +98,19 @@ function getUsers(array $params = [])
     $orderDir = $params['orderDir'] ?? '';
     $search = $params['search'] ?? '';
 
-    $sql = "SELECT * FROM users ORDER BY $orderBy $orderDir  LIMIT  0,$limit ";
+    $sql = 'SELECT * FROM users';
+    if ($search) {
+        $sql .= ' WHERE';
+        if (is_numeric($search)) {
+            $sql .= " (id = $search OR age = $search)";
+        } else {
+            $sql .= " (fiscalcode like '%$search%' OR email like '%$search%' OR
+             username like '%$search%'
+            )";
+        }
+    }
+
+    $sql .= " ORDER BY $orderBy $orderDir  LIMIT  0,$limit ";
     echo $sql;
     $res = $conn->query($sql);
     if ($res) {

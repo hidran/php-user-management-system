@@ -29,7 +29,7 @@ $newActive = $action === "insert" ? "active" : "";
                 </ul>
                 <form class=" g-3" method="GET" role="search" id="searchForm">
                     <div class="row">
-                        <div class="col mt-2">
+                        <div class="col-3 mt-2">
                             <label class="form-label text-bg-dark" for="recordsPerPage">Records per page</label>
                         </div>
                         <div class="col">
@@ -49,6 +49,9 @@ $newActive = $action === "insert" ? "active" : "";
                         </div>
                         <div class="col">
                             <button class="btn btn-outline-success" type="submit">Search</button>
+                        </div>
+                        <div class="col-2">
+                            <button onclick="location.href='<?= $page ?>' " class="btn btn-outline-info" type="button">RESET</button>
                         </div>
                     </div>
                 </form>

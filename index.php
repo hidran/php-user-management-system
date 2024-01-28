@@ -3,12 +3,12 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require_once 'functions.php';
-
+$page = $_SERVER['PHP_SELF'];
 $recordsPerPageOptions = getConfig('recordsPerPageOptions', [5, 10, 20]);
 $recordsPerPageDefault = getConfig('recordsPerPage', 10);
 $recordsPerPage = (int)getParam('recordsPerPage', $recordsPerPageDefault);
 $search = getParam('search', '');
-$search = strip_tags($search);
+$search = strip_tags(trim($search));
 require_once 'view/top.php';
 require_once 'view/nav.php';
 ?>
@@ -18,7 +18,7 @@ require_once 'view/nav.php';
     <div class='container'>
         <h1>USER MANAGEMENT SYSTEM</h1>
         <?php
-        $page = $_SERVER['PHP_SELF'];
+
         $action = getParam('action');
         switch ($action) {
 
