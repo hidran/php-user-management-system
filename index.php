@@ -17,8 +17,16 @@ require_once 'view/nav.php';
 
 
             default:
-                $users = getUsers();
-                $users = [];
+
+                $orderByColumns = getConfig('orderByColumns', []);
+                $orderBy = getParam('orderBy');
+
+                $orderBy = in_array($orderBy, $orderByColumns) ? $orderBy : null;
+                $recordsPerPage = getConfig('recordsPerPage');
+                //  $params = ['orderBy' => $orderBy, 'recordsPerPage' => $recordsPerPage];
+                $params = compact('orderBy', 'recordsPerPage');
+                $users = getUsers($params);
+
                 require 'view/userList.php';
                 break;
         }

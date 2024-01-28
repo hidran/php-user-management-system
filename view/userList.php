@@ -2,11 +2,11 @@
     <caption>USERS LIST</caption>
     <thead>
         <tr>
-            <th>ID</th>
-            <th>NAME</th>
-            <th>FISCAL CODE</th>
-            <th>EMAIL </th>
-            <th>AGE</th>
+            <th> <a href="?orderBy=id">ID</a></th>
+            <th><a href="?orderBy=username">NAME</a></th>
+            <th><a href="?orderBy=fiscalcode">FISCAL CODE</a></th>
+            <th><a href="?orderBy=email">EMAIL</a> </th>
+            <th><a href="?orderBy=age">AGE</a></th>
         </tr>
     </thead>
     <tbody>

@@ -1,11 +1,11 @@
 <?php
 require_once 'connection.php';
-function getConfig($param)
+function getConfig($param, $default = null)
 {
 
     $config = require 'config.php';
 
-    return array_key_exists($param, $config) ? $config[$param] : null;
+    return  $config[$param] ?? $default;
 }
 function getParam($param, $default = '')
 {
@@ -93,13 +93,11 @@ function getUsers(array $params = [])
 
     $records = [];
 
-    $limit = getConfig('recordsPerPage');
+    $limit = $params['recordsPerPage'] ?? 10;
+    $orderBy = $params['orderBy'] ?? 'id';
 
-    if (!$limit) {
-        $limit = 10;
-    }
-    $sql = 'SELECT * FROM users LIMIT ' . $limit;
-    // echo $sql;
+    $sql = "SELECT * FROM users ORDER BY $orderBy  LIMIT  $limit ";
+    echo $sql;
     $res = $conn->query($sql);
     if ($res) {
 
@@ -110,5 +108,9 @@ function getUsers(array $params = [])
 
     return $records;
 }
-
+function dd(mixed $data = null)
+{
+    var_dump($data);
+    die;
+}
 //var_dump(getUsers());
