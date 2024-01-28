@@ -96,9 +96,10 @@ function getUsers(array $params = [])
     $limit = $params['recordsPerPage'] ?? 10;
     $orderBy = $params['orderBy'] ?? 'id';
     $orderDir = $params['orderDir'] ?? '';
+    $search = $params['search'] ?? '';
 
-    $sql = "SELECT * FROM users ORDER BY $orderBy $orderDir  LIMIT  $limit ";
-    // echo $sql;
+    $sql = "SELECT * FROM users ORDER BY $orderBy $orderDir  LIMIT  0,$limit ";
+    echo $sql;
     $res = $conn->query($sql);
     if ($res) {
 

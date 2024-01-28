@@ -6,5 +6,10 @@ return [
     'mysql_password' => '',
     'mysql_db' => 'corsophp',
     'recordsPerPage' => 10,
-    'orderByColumns' => ['id', 'username', 'fiscalcode', 'age', 'email']
+    'orderByColumns' =>
+    ['id', 'username', 'fiscalcode', 'age', 'email'],
+    'recordsPerPageOptions' =>
+    [
+        5, 10, 15, 20, 50, 100
+    ]
 ];

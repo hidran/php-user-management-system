@@ -3,6 +3,12 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require_once 'functions.php';
+
+$recordsPerPageOptions = getConfig('recordsPerPageOptions', [5, 10, 20]);
+$recordsPerPageDefault = getConfig('recordsPerPage', 10);
+$recordsPerPage = (int)getParam('recordsPerPage', $recordsPerPageDefault);
+$search = getParam('search', '');
+$search = strip_tags($search);
 require_once 'view/top.php';
 require_once 'view/nav.php';
 ?>
@@ -26,11 +32,12 @@ require_once 'view/nav.php';
                     $orderDir = 'ASC';
                 }
                 $orderBy = in_array($orderBy, $orderByColumns) ? $orderBy : null;
-                $recordsPerPage = getConfig('recordsPerPage', 10);
+
                 $params = [
                     'orderBy' => $orderBy,
                     'recordsPerPage' => $recordsPerPage,
-                    'orderDir' => $orderDir
+                    'orderDir' => $orderDir,
+                    'search' => $search
                 ];
                 $users = getUsers($params);
                 $orderDir = $orderDir === 'ASC' ? 'DESC' : 'ASC';
