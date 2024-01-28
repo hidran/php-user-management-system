@@ -1,32 +1,32 @@
 <?php
-$orderDirClass = $orderDir;
+$params = "search=$search&recordsPerPage=$recordsPerPage&orderDir=$orderDir";
 ?>
 <table class="table table-dark table-striped">
     <caption>USERS LIST</caption>
     <thead>
         <tr>
             <th class="<?= $orderBy === 'id' ? $orderDirClass : '' ?>">
-                <a href="?orderBy=id&orderDir=<?= $orderDir ?>">
+                <a href="<?= $params ?>&orderBy=id">
                     ID
                 </a>
             </th>
             <th class="<?= $orderBy === 'username' ? $orderDirClass : '' ?>">
-                <a href="?orderBy=username&orderDir=<?= $orderDir ?>">
+                <a href="?<?= $params ?>&orderBy=username">
                     NAME
                 </a>
             </th>
             <th class="<?= $orderBy === 'fiscalcode' ? $orderDirClass : '' ?>">
-                <a href="?orderBy=fiscalcode&orderDir=<?= $orderDir ?>">
+                <a href="?<?= $params ?>&orderBy=fiscalcode">
                     FISCAL CODE
                 </a>
             </th>
             <th class="<?= $orderBy === 'email' ? $orderDirClass : '' ?>">
-                <a href="?orderBy=email&orderDir=<?= $orderDir ?>">
+                <a href="?<?= $params ?>&orderBy=email">
                     EMAIL
                 </a>
             </th>
             <th class="<?= $orderBy === 'age' ? $orderDirClass : '' ?>">
-                <a href="?orderBy=age&orderDir=<?= $orderDir ?>">
+                <a href="?<?= $params ?>&orderBy=age">
                     AGE
                 </a>
             </th>

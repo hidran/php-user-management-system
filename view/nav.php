@@ -28,6 +28,9 @@ $newActive = $action === "insert" ? "active" : "";
                     </li>
                 </ul>
                 <form class=" g-3" method="GET" role="search" id="searchForm">
+                    <input type="hidden" name="orderBy" value="<?= $orderBy ?>">
+                    <input type="hidden" name="orderDir" value="<?= $orderDir ?>">
+
                     <div class="row">
                         <div class="col-3 mt-2">
                             <label class="form-label text-bg-dark" for="recordsPerPage">Records per page</label>
