@@ -111,7 +111,7 @@ function getUsers(array $params = [])
     }
 
     $sql .= " ORDER BY $orderBy $orderDir  LIMIT  0,$limit ";
-    echo $sql;
+    //   echo $sql;
     $res = $conn->query($sql);
     if ($res) {
 

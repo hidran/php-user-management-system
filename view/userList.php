@@ -46,15 +46,25 @@ $params = "search=$search&recordsPerPage=$recordsPerPage&orderDir=$orderDir";
 
             <?php
             }
+            ?>
+    <tfoot>
+        <tr>
+            <td class="text-center" colspan="5">
+                <?php require 'view/navigation.php' ?>
+            </td>
+        </tr>
+    </tfoot>
+<?php
+
         } else { ?>
-            <tr>
-                <td class="text-center" colspan="5">
-                    <div class="alert alert-danger"> NO RECORDS FOUND</div>
-                </td>
-            </tr>
-        <?php
+    <tr>
+        <td class="text-center" colspan="5">
+            <div class="alert alert-danger"> NO RECORDS FOUND</div>
+        </td>
+    </tr>
+<?php
         }
 
-        ?>
-    </tbody>
+?>
+</tbody>
 </table>
