@@ -1,12 +1,35 @@
+<?php
+$orderDirClass = $orderDir;
+?>
 <table class="table table-dark table-striped">
     <caption>USERS LIST</caption>
     <thead>
         <tr>
-            <th> <a href="?orderBy=id">ID</a></th>
-            <th><a href="?orderBy=username">NAME</a></th>
-            <th><a href="?orderBy=fiscalcode">FISCAL CODE</a></th>
-            <th><a href="?orderBy=email">EMAIL</a> </th>
-            <th><a href="?orderBy=age">AGE</a></th>
+            <th class="<?= $orderBy === 'id' ? $orderDirClass : '' ?>">
+                <a href="?orderBy=id&orderDir=<?= $orderDir ?>">
+                    ID
+                </a>
+            </th>
+            <th class="<?= $orderBy === 'username' ? $orderDirClass : '' ?>">
+                <a href="?orderBy=username&orderDir=<?= $orderDir ?>">
+                    NAME
+                </a>
+            </th>
+            <th class="<?= $orderBy === 'fiscalcode' ? $orderDirClass : '' ?>">
+                <a href="?orderBy=fiscalcode&orderDir=<?= $orderDir ?>">
+                    FISCAL CODE
+                </a>
+            </th>
+            <th class="<?= $orderBy === 'email' ? $orderDirClass : '' ?>">
+                <a href="?orderBy=email&orderDir=<?= $orderDir ?>">
+                    EMAIL
+                </a>
+            </th>
+            <th class="<?= $orderBy === 'age' ? $orderDirClass : '' ?>">
+                <a href="?orderBy=age&orderDir=<?= $orderDir ?>">
+                    AGE
+                </a>
+            </th>
         </tr>
     </thead>
     <tbody>

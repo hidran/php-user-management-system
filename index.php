@@ -12,6 +12,7 @@ require_once 'view/nav.php';
     <div class='container'>
         <h1>USER MANAGEMENT SYSTEM</h1>
         <?php
+        $page = $_SERVER['PHP_SELF'];
         $action = getParam('action');
         switch ($action) {
 
@@ -19,14 +20,20 @@ require_once 'view/nav.php';
             default:
 
                 $orderByColumns = getConfig('orderByColumns', []);
-                $orderBy = getParam('orderBy');
-
+                $orderBy = getParam('orderBy', 'id');
+                $orderDir = getParam('orderDir', 'ASC');
+                if (!in_array($orderDir, ['ASC', 'DESC'])) {
+                    $orderDir = 'ASC';
+                }
                 $orderBy = in_array($orderBy, $orderByColumns) ? $orderBy : null;
-                $recordsPerPage = getConfig('recordsPerPage');
-                //  $params = ['orderBy' => $orderBy, 'recordsPerPage' => $recordsPerPage];
-                $params = compact('orderBy', 'recordsPerPage');
+                $recordsPerPage = getConfig('recordsPerPage', 10);
+                $params = [
+                    'orderBy' => $orderBy,
+                    'recordsPerPage' => $recordsPerPage,
+                    'orderDir' => $orderDir
+                ];
                 $users = getUsers($params);
-
+                $orderDir = $orderDir === 'ASC' ? 'DESC' : 'ASC';
                 require 'view/userList.php';
                 break;
         }

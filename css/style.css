@@ -1,6 +1,17 @@
-body{
+body {
     font-family: 'Noto Sans', Georgia, Helvetica, sans-serif;
 }
-i.fa-solid{
+i.fa-solid {
     margin-right: 5px;
+}
+
+.table thead th.ASC:after,
+.table thead th.DESC:after {
+    content: '↑';
+    color: red;
+    font-weight: bold;
+    padding: 3px;
+}
+.table thead th.DESC:after {
+    content: '↓';
 }
