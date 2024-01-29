@@ -56,7 +56,7 @@ function getRandomAge(): int
 {
     return random_int(0, 120);
 }
-function insertRandUser($totale, mysqli $conn)
+function insertRandUser($totale, mysqli $conn): void
 {
 
     while ($totale > 0) {
@@ -81,8 +81,8 @@ function insertRandUser($totale, mysqli $conn)
 /**
  * @var \Mysqli $mysqli
  */
-//insertRandUser(30, $mysqli);
-function getUsers(array $params = [])
+//insertRandUser(300, $mysqli);
+function getUsers(array $params = []): array
 {
 
     /**
@@ -122,6 +122,40 @@ function getUsers(array $params = [])
 
     return $records;
 }
+
+function getTotalUserCount(string $search = ''): int
+{
+
+    /**
+     * @var $conn mysqli
+     */
+
+    $conn = $GLOBALS['mysqli'];
+
+
+    $sql = 'SELECT COUNT(*) as total FROM users';
+    if ($search) {
+        $sql .= ' WHERE';
+        if (is_numeric($search)) {
+            $sql .= " id = $search OR age = $search";
+        } else {
+            $search = $conn->real_escape_string($search);
+            $sql .= " fiscalcode like '%$search%' OR email like '%$search%' OR
+             username like '%$search%'";
+        }
+    }
+
+
+    echo $sql;
+    $res = $conn->query($sql);
+    if ($res && $row = $res->fetch_assoc()) {
+
+        return (int) $row['total'];
+    }
+
+    return 0;
+}
+
 function dd(mixed $data = null)
 {
     var_dump($data);

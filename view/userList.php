@@ -5,6 +5,11 @@ $params = "search=$search&recordsPerPage=$recordsPerPage&orderDir=$orderDir";
     <caption>USERS LIST</caption>
     <thead>
         <tr>
+            <th colspan="5" class="text-center text-bg-dark">
+                <?= $totalRecords ?> RECORDS FOUND
+            </th>
+        </tr>
+        <tr>
             <th class="<?= $orderBy === 'id' ? $orderDirClass : '' ?>">
                 <a href="<?= $params ?>&orderBy=id">
                     ID

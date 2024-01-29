@@ -43,7 +43,9 @@ require_once 'view/nav.php';
                     'orderDir' => $orderDir,
                     'search' => $search
                 ];
-                $users = getUsers($params);
+                $totalRecords = getTotalUserCount($search);
+
+                $users = $totalRecords ? getUsers($params) : [];
 
                 $orderDirClass = $orderDir;
 
