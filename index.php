@@ -50,6 +50,7 @@ require_once 'view/nav.php';
                 $orderDirClass = $orderDir;
 
                 $orderDir = $orderDir === 'ASC' ? 'DESC' : 'ASC';
+                $page = getParam('page', 1);
                 require 'view/userList.php';
                 break;
         }

@@ -1,5 +1,6 @@
 <?php
 $params = "search=$search&recordsPerPage=$recordsPerPage&orderDir=$orderDir";
+$baseUrl = "$page?$params";
 ?>
 <table class="table table-dark table-striped">
     <caption>USERS LIST</caption>
@@ -54,8 +55,11 @@ $params = "search=$search&recordsPerPage=$recordsPerPage&orderDir=$orderDir";
             ?>
     <tfoot>
         <tr>
-            <td class="text-center" colspan="5">
-                <?php require 'view/navigation.php' ?>
+            <td style="vertical-align: middle;" class="align-items-center text-center" colspan="5">
+                <?php
+                require 'view/navigation.php';
+                echo createPagination($totalRecords, $recordsPerPage, $page, $baseUrl);
+                ?>
             </td>
         </tr>
     </tfoot>
