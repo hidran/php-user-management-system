@@ -97,7 +97,8 @@ function getUsers(array $params = []): array
     $orderBy = $params['orderBy'] ?? 'id';
     $orderDir = $params['orderDir'] ?? '';
     $search = $params['search'] ?? '';
-
+    $page = $params['page'] ?? 1;
+    $start = $limit * ($page - 1);
     $sql = 'SELECT * FROM users';
     if ($search) {
         $sql .= ' WHERE';
@@ -110,8 +111,8 @@ function getUsers(array $params = []): array
         }
     }
 
-    $sql .= " ORDER BY $orderBy $orderDir  LIMIT  0,$limit ";
-    //   echo $sql;
+    $sql .= " ORDER BY $orderBy $orderDir  LIMIT  $start,$limit ";
+      echo $sql;
     $res = $conn->query($sql);
     if ($res) {
 

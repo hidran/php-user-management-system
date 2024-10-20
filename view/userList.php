@@ -1,6 +1,9 @@
 <?php
-$params = "search=$search&recordsPerPage=$recordsPerPage&orderDir=$orderDir";
+$params = "search=$search&recordsPerPage=$recordsPerPage&orderBy=$orderBy";
+$navParams = $params."&orderDir=$currentOrderDir";
+$params .= "&orderDir=$orderDir";
 $baseUrl = "$page?$params";
+$navUrl ="$page?$navParams";
 $totalPages = (int)ceil($totalRecords / $recordsPerPage);
 ?>
 <table class="table table-dark table-striped">
@@ -60,7 +63,7 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
             <td style="vertical-align: middle;" class="align-items-center text-center" colspan="5">
                 <?php
                 require 'view/navigation.php';
-                echo createPagination($totalRecords, $recordsPerPage, $currentPage, $baseUrl,$maxLinks);
+                echo createPagination($totalRecords, $recordsPerPage, $currentPage, $navUrl,$maxLinks);
                 ?>
             </td>
         </tr>

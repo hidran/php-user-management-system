@@ -15,7 +15,8 @@ $search = strip_tags(trim($search));
 $orderByColumns = getConfig('orderByColumns', []);
 $maxLinks = getConfig('maxLinks', 10);
 $orderBy = getParam('orderBy', 'id');
-$orderDir = getParam('orderDir', 'ASC');
+$currentOrderDir = getParam('orderDir', 'ASC');
+$currentPage = getParam('page', 1);
 if (!in_array($orderDir, ['ASC', 'DESC'])) {
     $orderDir = 'ASC';
 }
@@ -42,7 +43,8 @@ require_once 'view/nav.php';
                     'orderBy' => $orderBy,
                     'recordsPerPage' => $recordsPerPage,
                     'orderDir' => $orderDir,
-                    'search' => $search
+                    'search' => $search,
+                    'page' => $currentPage
                 ];
                 $totalRecords = getTotalUserCount($search);
 
@@ -50,8 +52,8 @@ require_once 'view/nav.php';
 
                 $orderDirClass = $orderDir;
 
-                $orderDir = $orderDir === 'ASC' ? 'DESC' : 'ASC';
-                $currentPage = getParam('page', 1);
+                $orderDir = $currentOrderDir === 'ASC' ? 'DESC' : 'ASC';
+               
                 require 'view/userList.php';
                 break;
         }
