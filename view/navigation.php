@@ -3,7 +3,8 @@ function createPagination(
     int $totalRecords,
     int $recordsPerPage,
     int $currentPage,
-    string $baseUrl
+    string $baseUrl,
+    int $maxLinks = 10
 ) {
 
     $totalPages = (int)ceil($totalRecords / $recordsPerPage);
@@ -15,10 +16,23 @@ function createPagination(
     $html .=  '<li class="page-item' . $disabled . '">
             <a  href="' . $baseUrl . ' &page=' . $previous . '" class="page-link">Previous</a>
         </li>';
-    for ($i = 1; $i <= $totalPages; $i++) {
-        $activeClass = $i == $currentPage ? ' active' : '';
-        $disabled = $i == $currentPage ? ' disabled' : '';
-        $html .=  '<li class="page-item"><a class="page-link' . $activeClass . $disabled . '" href="' . $baseUrl . '&page=' . $i . '">' . $i . '</a></li>';
+
+    // current page 5,6,7,8,9  10, 11,12,13,14,15,16,17
+       $startPage =(int) max(1,$currentPage - floor($maxLinks / 2));
+       $endPage = min($startPage + $maxLinks - 1, $totalPages);
+
+       if(($endPage - $startPage +1) < $maxLinks){
+           $startPage = max(1, $endPage - $maxLinks + 1 );
+       }
+
+    for ($i = $startPage; $i <= $endPage; $i++) {
+        
+        if($i === $currentPage){
+             $html .= '<li class="page-item"><span class="page-link active">'.$i.'</span></li>';
+        } else{
+            $html .=  '<li class="page-item"><a class="page-link" href="' . $baseUrl . '&page=' . $i . '">' . $i . '</a></li>';
+
+        }
     }
 
 

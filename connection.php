@@ -3,7 +3,7 @@
 
 $config = require 'config.php';
 
-
+//print_r($config);
 $mysqli = new mysqli(
     $config['mysql_host'],
     $config['mysql_user'],
@@ -11,9 +11,8 @@ $mysqli = new mysqli(
     $config['mysql_db']
 );
 
- unset($config );
+unset($config);
 
- if($mysqli->connect_error){
-     die($mysqli->connect_error);
- }
- 
+if ($mysqli->connect_error) {
+    die($mysqli->connect_error);
+}

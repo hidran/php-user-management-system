@@ -15,3 +15,7 @@ i.fa-solid {
 .table thead th.DESC:after {
     content: '↓';
 }
+
+a.disabled{
+    background-color: blue;
+}

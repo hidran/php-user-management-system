@@ -1,13 +1,15 @@
 <?php
 $params = "search=$search&recordsPerPage=$recordsPerPage&orderDir=$orderDir";
 $baseUrl = "$page?$params";
+$totalPages = (int)ceil($totalRecords / $recordsPerPage);
 ?>
 <table class="table table-dark table-striped">
     <caption>USERS LIST</caption>
     <thead>
         <tr>
             <th colspan="5" class="text-center text-bg-dark">
-                <?= $totalRecords ?> RECORDS FOUND
+                <?= $totalRecords ?> RECORDS FOUND.
+                PAGE <?=$currentPage?> of <?=$totalPages?>
             </th>
         </tr>
         <tr>
@@ -58,7 +60,7 @@ $baseUrl = "$page?$params";
             <td style="vertical-align: middle;" class="align-items-center text-center" colspan="5">
                 <?php
                 require 'view/navigation.php';
-                echo createPagination($totalRecords, $recordsPerPage, $page, $baseUrl);
+                echo createPagination($totalRecords, $recordsPerPage, $currentPage, $baseUrl,$maxLinks);
                 ?>
             </td>
         </tr>

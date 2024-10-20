@@ -146,7 +146,7 @@ function getTotalUserCount(string $search = ''): int
     }
 
 
-    echo $sql;
+    //echo $sql;
     $res = $conn->query($sql);
     if ($res && $row = $res->fetch_assoc()) {
 

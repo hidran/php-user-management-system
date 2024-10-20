@@ -13,6 +13,7 @@ $search = getParam('search', '');
 $search = strip_tags(trim($search));
 //order by
 $orderByColumns = getConfig('orderByColumns', []);
+$maxLinks = getConfig('maxLinks', 10);
 $orderBy = getParam('orderBy', 'id');
 $orderDir = getParam('orderDir', 'ASC');
 if (!in_array($orderDir, ['ASC', 'DESC'])) {
@@ -50,7 +51,7 @@ require_once 'view/nav.php';
                 $orderDirClass = $orderDir;
 
                 $orderDir = $orderDir === 'ASC' ? 'DESC' : 'ASC';
-                $page = getParam('page', 1);
+                $currentPage = getParam('page', 1);
                 require 'view/userList.php';
                 break;
         }
