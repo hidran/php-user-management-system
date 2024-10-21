@@ -27,36 +27,70 @@ $newActive = $action === "insert" ? "active" : "";
                         <a class="nav-link disabled">Disabled</a>
                     </li>
                 </ul>
-                <form class=" g-3" method="GET" role="search" id="searchForm">
-                    <input type="hidden" name="orderBy" value="<?= $orderBy ?>">
-                    <input type="hidden" name="orderDir" value="<?= $orderDir ?>">
-
+                <form  method="GET" role="search" name="searchForm" id="searchForm">
                     <div class="row">
-                        <div class="col-3 mt-2">
-                            <label class="form-label text-bg-dark" for="recordsPerPage">Records per page</label>
-                        </div>
-                        <div class="col">
-                            <select class="form-select" name="recordsPerPage" id="recordsPerPage" onchange="document.forms.searchForm.submit()">
-                                <option value="">SELECT</option>
-                                <?php
-                                foreach ($recordsPerPageOptions as $v) {
-                                    $v = (int) $v;
-                                    $selected = $v === $recordsPerPage ? 'selected' : '';
-                                    echo "<option $selected  value ='$v'>$v</option> \n";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col">
-                            <input name="search" value="<?= $search ?>" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </div>
                         <div class="col-2">
-                            <button onclick="location.href='<?= $page ?>' " class="btn btn-outline-info" type="button">RESET</button>
-                        </div>
-                    </div>
+                            <div class="row d-flex justify-content-center  align-content-center">
+
+                                <div class="col-md-6">
+                                    <label class="form-label  text-bg-dark mt-2" for="orderBy"> Order by</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-select" name="orderBy" id="orderBy" onchange="document.forms.searchForm.submit()">
+                                        <option value="">SELECT</option>
+                                        <?php
+                                        foreach ($orderByColumns as $col) {
+
+                                            $selected = $col === $orderBy ? 'selected' : '';
+                                            echo "<option $selected  value ='$col'>$col</option> \n";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="row d-flex align-content-center">
+                                        <div class="col-md-4 mt-2">
+                                            <label class="form-label  text-bg-dark" for="orderDir"> Dir</label>
+
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select class="form-select" name="orderDir" id="orderDir" onchange="document.forms.searchForm.submit()">
+                                                <option value="">SELECT</option>
+                                                <option value="ASC" <?= $currentOrderDir === 'ASC' ? 'selected' : '' ?>>ASC</option>
+                                                <option value="DESC" <?= $currentOrderDir === 'DESC' ? 'selected' : '' ?>>DESC</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col mt-2">
+                                    <label class="form-label text-bg-dark" for="recordsPerPage">Records</label>
+                                </div>
+                                <div class="col">
+                                    <select class="form-select" name="recordsPerPage" id="recordsPerPage" onchange="document.forms.searchForm.submit()">
+                                        <option value="">SELECT</option>
+                                        <?php
+                                        foreach ($recordsPerPageOptions as $v) {
+                                            $v = (int) $v;
+                                            $selected = $v === $recordsPerPage ? 'selected' : '';
+                                            echo "<option $selected  value ='$v'>$v</option> \n";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <input name="search" value="<?= $search ?>" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </div>
+                                <div class="col">
+                                    <button onclick="location.href='<?= $page ?>' " class="btn btn-outline-info" type="button">RESET</button>
+                                </div>
+                            </div>
                 </form>
             </div>
         </div>
