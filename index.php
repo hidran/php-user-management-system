@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require_once 'functions.php';
 $page =$pageUrl= $_SERVER['PHP_SELF'];
+$updateUrl = 'controller/updateRecord.php';
 //records per page
 $recordsPerPageOptions = getConfig('recordsPerPageOptions', [5, 10, 20]);
 $recordsPerPageDefault = getConfig('recordsPerPage', 10);
@@ -35,30 +36,7 @@ require_once 'view/nav.php';
         <?php
 
         $action = getParam('action');
-        switch ($action) {
-
-
-            default:
-
-
-                $params = [
-                    'orderBy' => $orderBy,
-                    'recordsPerPage' => $recordsPerPage,
-                    'orderDir' => $currentOrderDir,
-                    'search' => $search,
-                    'page' => $currentPage
-                ];
-                $totalRecords = getTotalUserCount($search);
-
-                $users = $totalRecords ? getUsers($params) : [];
-
-                $orderDirClass = $currentOrderDir;
-
-                $orderDir = $currentOrderDir === 'ASC' ? 'DESC' : 'ASC';
-               
-                require 'view/userList.php';
-                break;
-        }
+        require_once 'controller/displayUsers.php';
         ?>
 
     </div>

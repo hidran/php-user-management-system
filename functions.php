@@ -89,7 +89,7 @@ function getUsers(array $params = []): array
      * @var $conn mysqli
      */
 
-    $conn = $GLOBALS['mysqli'];
+    $conn = getConnection();
 
     $records = [];
 
@@ -112,7 +112,7 @@ function getUsers(array $params = []): array
     }
 
     $sql .= " ORDER BY $orderBy $orderDir  LIMIT  $start,$limit ";
-      echo $sql;
+     // echo $sql;
     $res = $conn->query($sql);
     if ($res) {
 
@@ -131,7 +131,7 @@ function getTotalUserCount(string $search = ''): int
      * @var $conn mysqli
      */
 
-    $conn = $GLOBALS['mysqli'];
+    $conn = getConnection();
 
 
     $sql = 'SELECT COUNT(*) as total FROM users';

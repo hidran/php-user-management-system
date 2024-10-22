@@ -1,5 +1,7 @@
 <?php
 
+function getConnection():mysqli{
+
 
 $config = require 'config.php';
 
@@ -11,8 +13,10 @@ $mysqli = new mysqli(
     $config['mysql_db']
 );
 
-unset($config);
+
 
 if ($mysqli->connect_error) {
     die($mysqli->connect_error);
+}
+    return $mysqli;
 }

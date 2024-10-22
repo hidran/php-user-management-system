@@ -17,7 +17,7 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
         </tr>
         <tr>
             <th class="<?= $orderBy === 'id' ? $orderDirClass : '' ?>">
-                <a href="<?= $params ?>&orderBy=id">
+                <a href="?<?= $params ?>&orderBy=id">
                     ID
                 </a>
             </th>
@@ -57,13 +57,13 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
                     <td>
                         <div class="row">
                             <div class="col-6">
-                                <a class="btn btn-success" href="<?= $pageUrl ?>?action=update">
+                                <a class="btn btn-success" href="<?= $updateUrl  ?>?id=<?= $user['id'] ?>&action=update&<?= $navParams ?>">
                                     <i class="fa fa-pen"></i>
                                     UPDATE
                                 </a>
                             </div>
                             <div class="col-6">
-                                <a onclick="return confirm('DELETE USER?')" class="btn btn-danger" href="<?= $pageUrl ?>?id=<?= $user['id'] ?>&action=delete">
+                                <a onclick="return confirm('DELETE USER?')" class="btn btn-danger" href="<?= $updateUrl  ?>?id=<?= $user['id'] ?>&action=delete&<?= $navParams ?>">
                                     <i class="fa fa-trash"></i>
                                     DELETE
                                 </a>
