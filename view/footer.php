@@ -9,7 +9,17 @@
 <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.2/dist/js/bootstrap.bundle.min.js'></script>
 
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const message = document.getElementById('message');
+        if (message) {
+            setTimeout(function() {
+                message.parentNode.removeChild(message);
+            }, 5000)
 
+        }
+    });
+</script>
 </body>
 
 </html>

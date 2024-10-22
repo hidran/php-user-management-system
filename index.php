@@ -1,4 +1,5 @@
 <?php
+session_start();
 // for dev purposes
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -34,7 +35,13 @@ require_once 'view/nav.php';
     <div class='container'>
         <h1>USER MANAGEMENT SYSTEM</h1>
         <?php
-
+        if(!empty($_SESSION['message'])){
+            $message = $_SESSION['message'];
+            unset($_SESSION['message']);
+            $success = $_SESSION['success'] ?? true;
+            $alertType = $success? 'success': 'danger';
+            require_once 'view/message.php';
+        }
         $action = getParam('action');
         require_once 'controller/displayUsers.php';
         ?>

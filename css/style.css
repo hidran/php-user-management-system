@@ -19,3 +19,7 @@ i.fa-solid {
 a.disabled{
     background-color: blue;
 }
+.fade-out {
+  opacity: 0;
+  transition: opacity 5s ease-out;
+}
