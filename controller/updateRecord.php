@@ -10,14 +10,32 @@ switch ($action) {
         $message = $res? 'USER '. $id. ' DELETED'
         : 'ERROR DELETING USER ' . $id;
         $_SESSION['message'] = $message;
-        $_SESSION['success'] = $res;
+        $_SESSION['messageType'] = $res ? 'success':'danger';
         $params = $_GET;
         unset($params['id'], $params['action']);
         $queryString = http_build_query($params);
         header('Location:../index.php?'.$queryString);
         break;
     case 'update':
-        # code...
+        $id = (int)$_POST['id'];
+        
+        $userData = [
+            'id' => $id,
+            'username'=> trim($_POST['username']),
+            'email' => trim($_POST['email']),
+            'fiscalcode' => trim($_POST['fiscalcode']),
+            'age' => (int)$_POST['age']
+        ];
+       // dd($userData['fiscalcode'], strlen($userData['fiscalcode']));
+        $res = updateUser($userData, $id);
+        $message = $res ? 'USER ' . $id . ' UPDATED'
+        : 'ERROR UPDATING USER ' . $id;
+        $_SESSION['message'] = $message;
+        $_SESSION['messageType'] = $res ? 'success' : 'danger';
+        $params = $_GET;
+        unset($params['id'], $params['action']);
+        $queryString = http_build_query($params);
+        header('Location:../index.php?' . $queryString);
         break;
     default:
         # code...

@@ -57,7 +57,7 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
                     <td>
                         <div class="row">
                             <div class="col-6">
-                                <a class="btn btn-success" href="?id=<?= $user['id'] ?>&action=update&<?= $navParams ?>">
+                                <a class="btn btn-success" href="?id=<?= $user['id'] ?>&action=edit&<?= $navParams ?>">
                                     <i class="fa fa-pen"></i>
                                     UPDATE
                                 </a>

@@ -1,4 +1,5 @@
 <?php
+
 require_once 'connection.php';
 function getConfig($param, $default = null)
 {
@@ -157,9 +158,17 @@ function getTotalUserCount(string $search = ''): int
     return 0;
 }
 
-function dd(mixed $data = null)
+function dd(mixed ...$data )
 {
     var_dump($data);
     die;
 }
-//var_dump(getUsers());
+function showSessionMsg(){
+    if (!empty($_SESSION['message'])) {
+        $message = $_SESSION['message'];
+        unset($_SESSION['message']);
+        $alertType = $_SESSION['messageType'];
+        unset($_SESSION['messageType']);
+        require_once 'view/message.php';
+    }
+}
