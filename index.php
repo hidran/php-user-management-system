@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require_once 'functions.php';
-$page = $_SERVER['PHP_SELF'];
+$page =$pageUrl= $_SERVER['PHP_SELF'];
 //records per page
 $recordsPerPageOptions = getConfig('recordsPerPageOptions', [5, 10, 20]);
 $recordsPerPageDefault = getConfig('recordsPerPage', 10);

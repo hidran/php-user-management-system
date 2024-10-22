@@ -1,18 +1,18 @@
 <?php
 $params = "search=$search&recordsPerPage=$recordsPerPage&orderBy=$orderBy";
-$navParams = $params."&orderDir=$currentOrderDir";
+$navParams = $params . "&orderDir=$currentOrderDir";
 $params .= "&orderDir=$orderDir";
 $baseUrl = "$page?$params";
-$navUrl ="$page?$navParams";
+$navUrl = "$page?$navParams";
 $totalPages = (int)ceil($totalRecords / $recordsPerPage);
 ?>
 <table class="table table-dark table-striped">
     <caption>USERS LIST</caption>
     <thead>
         <tr>
-            <th colspan="5" class="text-center text-bg-dark">
+            <th colspan="6" class="text-center text-bg-dark">
                 <?= $totalRecords ?> RECORDS FOUND.
-                PAGE <?=$currentPage?> of <?=$totalPages?>
+                PAGE <?= $currentPage ?> of <?= $totalPages ?>
             </th>
         </tr>
         <tr>
@@ -41,6 +41,7 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
                     AGE
                 </a>
             </th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -53,6 +54,22 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
                     <td><?= $user['fiscalcode'] ?></td>
                     <td><a href="mailto:<?= $user['email'] ?>"> <?= $user['email'] ?></a></td>
                     <td><?= $user['age'] ?></td>
+                    <td>
+                        <div class="row">
+                            <div class="col-6">
+                                <a class="btn btn-success" href="<?= $pageUrl ?>?action=update">
+                                    <i class="fa fa-pen"></i>
+                                    UPDATE
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a onclick="return confirm('DELETE USER?')" class="btn btn-danger" href="<?= $pageUrl ?>?id=<?= $user['id'] ?>&action=delete">
+                                    <i class="fa fa-trash"></i>
+                                    DELETE
+                                </a>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
 
             <?php
@@ -60,10 +77,10 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
             ?>
     <tfoot>
         <tr>
-            <td style="vertical-align: middle;" class="align-items-center text-center" colspan="5">
+            <td style="vertical-align: middle;" class="align-items-center text-center" colspan="6">
                 <?php
                 require 'view/navigation.php';
-                echo createPagination($totalRecords, $recordsPerPage, $currentPage, $navUrl,$maxLinks);
+                echo createPagination($totalRecords, $recordsPerPage, $currentPage, $navUrl, $maxLinks);
                 ?>
             </td>
         </tr>
