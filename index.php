@@ -43,7 +43,16 @@ require_once 'view/nav.php';
             require_once 'view/message.php';
         }
         $action = getParam('action');
-        require_once 'controller/displayUsers.php';
+        switch ($action) {
+            case 'update':
+                require_once 'view/userForm.php';
+                break;
+            
+            default:
+                require_once 'controller/displayUsers.php';
+                break;
+        }
+       
         ?>
 
     </div>
