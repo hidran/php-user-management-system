@@ -1,5 +1,6 @@
 body {
     font-family: 'Noto Sans', Georgia, Helvetica, sans-serif;
+   
 }
 i.fa-solid {
     margin-right: 5px;
@@ -21,5 +22,7 @@ a.disabled{
 }
 .fade-out {
   opacity: 0;
-  transition: opacity 5s ease-out;
+ 
+  transition: opacity 2s ease-out;
+  
 }

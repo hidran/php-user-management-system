@@ -13,9 +13,13 @@
     document.addEventListener('DOMContentLoaded', function() {
         const message = document.getElementById('message');
         if (message) {
-            setTimeout(function() {
-                message.parentNode.removeChild(message);
-            }, 5000)
+            setTimeout(() => {
+                message.classList.add('fade-out');
+
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 2000); 
+            }, 5000);
 
         }
     });

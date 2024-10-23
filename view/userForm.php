@@ -1,19 +1,22 @@
 <?php
-$action = 'insert';
+$action = 'store';
 $buttonName = 'SAVE';
+            $formTile = 'INSERT USER';
 if($user && $user['id']){
     $action = 'update';
     $buttonName = 'UPDATE';
+    $formTile = 'UPDATE USER';
 }
 foreach ($user as &$value) {
 
     $value = htmlspecialchars($value);
 }
 ?>
-<form action="controller/updateRecord.php" method="post">
+
+<form class="mt-4" action="controller/updateRecord.php" method="post">
     <input type="hidden" name="id" value="<?= $user['id'] ?>">
     <input type="hidden" name="action" value="<?=$action?>">
-
+<h2><?=$formTile?></h2>
     <div class="row mb-3">
         <label for="username" class="col-form-label text-end form-label col-sm-4">User name </label>
         <div class="col-sm-8">

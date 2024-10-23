@@ -35,3 +35,21 @@ function updateUser(array $data,int $id): bool
     $stm->close();
     return $res;
 }
+function storeUser(array $data): int
+{
+  $conn = getConnection();
+  $sql = 'INSERT INTO users (username,email,fiscalcode,age) values( ?, ?, ?,?)';
+  $stm = $conn->prepare($sql);
+  $stm->bind_param(
+    'sssi',
+    $data['username'],
+    $data['email'],
+    $data['fiscalcode'],
+    $data['age']
+   
+  );
+  $stm->execute();
+    
+  $stm->close();
+  return $conn->insert_id;;
+}

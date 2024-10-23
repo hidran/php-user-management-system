@@ -96,7 +96,7 @@ function getUsers(array $params = []): array
 
     $limit = $params['recordsPerPage'] ?? 10;
     $orderBy = $params['orderBy'] ?? 'id';
-    $orderDir = $params['orderDir'] ?? '';
+    $orderDir = $params['orderDir'] ?? 'DESC';
     $search = $params['search'] ?? '';
     $page = $params['page'] ?? 1;
     $start = $limit * ($page - 1);

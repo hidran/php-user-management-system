@@ -37,6 +37,29 @@ switch ($action) {
         $queryString = http_build_query($params);
         header('Location:../index.php?' . $queryString);
         break;
+
+    case 'store':
+       
+
+        $userData = [
+            
+            'username' => trim($_POST['username']),
+            'email' => trim($_POST['email']),
+            'fiscalcode' => trim($_POST['fiscalcode']),
+            'age' => (int)$_POST['age']
+        ];
+        // dd($userData['fiscalcode'], strlen($userData['fiscalcode']));
+        $res = storeUser($userData);
+       
+        $message = $res ? 'USER ' . $res . ' CREATED'
+        : 'ERROR CREATING USER ' ;
+        $_SESSION['message'] = $message;
+        $_SESSION['messageType'] = $res ? 'success' : 'danger';
+        $params = $_GET;
+        unset( $params['action']);
+        $queryString = http_build_query($params);
+        header('Location:../index.php?' . $queryString);
+        break;
     default:
         # code...
         break;
