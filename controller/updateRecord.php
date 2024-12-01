@@ -26,6 +26,14 @@ switch ($action) {
             'fiscalcode' => trim($_POST['fiscalcode']),
             'age' => (int)$_POST['age']
         ];
+        $avatarPath = '';
+      
+        if ($_FILES['avatar']['name'] && is_uploaded_file($_FILES['avatar']['tmp_name'])) {
+           
+            $avatarPath = handleAvatarUpload($_FILES['avatar'],$id);
+          
+        }
+         $userData['avatar'] = $avatarPath;
        // dd($userData['fiscalcode'], strlen($userData['fiscalcode']));
         $res = updateUser($userData, $id);
         $message = $res ? 'USER ' . $id . ' UPDATED'
@@ -46,9 +54,14 @@ switch ($action) {
             'username' => trim($_POST['username']),
             'email' => trim($_POST['email']),
             'fiscalcode' => trim($_POST['fiscalcode']),
-            'age' => (int)$_POST['age']
+            'age' => (int)$_POST['age'],
+            'avatar' => null
         ];
-        // dd($userData['fiscalcode'], strlen($userData['fiscalcode']));
+        $avatarPath = '';
+         if($_FILES['avatar']['name'] && is_uploaded_file($_FILES['avatar']['tmp_name'])){
+           $avatarPath = handleAvatarUpload($_FILES['avatar']);
+         }
+         $userData['avatar'] = $avatarPath;
         $res = storeUser($userData);
        
         $message = $res ? 'USER ' . $res . ' CREATED'

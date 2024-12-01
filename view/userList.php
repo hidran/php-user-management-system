@@ -10,7 +10,7 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
     <caption>USERS LIST</caption>
     <thead>
         <tr>
-            <th colspan="6" class="text-center text-bg-dark">
+            <th colspan="7" class="text-center text-bg-dark">
                 <?= $totalRecords ?> RECORDS FOUND.
                 PAGE <?= $currentPage ?> of <?= $totalPages ?>
             </th>
@@ -41,6 +41,7 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
                     AGE
                 </a>
             </th>
+            <th>Avatar</th>
             <th>&nbsp;</th>
         </tr>
     </thead>
@@ -54,6 +55,11 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
                     <td><?= $user['fiscalcode'] ?></td>
                     <td><a href="mailto:<?= $user['email'] ?>"> <?= $user['email'] ?></a></td>
                     <td><?= $user['age'] ?></td>
+                    <td><?php 
+                        if($user['avatar']){ ?>
+                            <img width="150" src="<?= $user['avatar']?>" alt="avatar">
+                       <?php }
+                    ?></td>
                     <td>
                         <div class="row">
                             <div class="col-6">
@@ -77,7 +83,7 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
             ?>
     <tfoot>
         <tr>
-            <td style="vertical-align: middle;" class="align-items-center text-center" colspan="6">
+            <td style="vertical-align: middle;" class="align-items-center text-center" colspan="7">
                 <?php
                 require 'view/navigation.php';
                 echo createPagination($totalRecords, $recordsPerPage, $currentPage, $navUrl, $maxLinks);
@@ -89,7 +95,7 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
 
         } else { ?>
     <tr>
-        <td class="text-center" colspan="5">
+        <td class="text-center" colspan="7">
             <div class="alert alert-danger"> NO RECORDS FOUND</div>
         </td>
     </tr>

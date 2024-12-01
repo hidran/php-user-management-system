@@ -21,13 +21,14 @@ function getUserById(int $id):array {
 function updateUser(array $data,int $id): bool
 {
     $conn = getConnection();
-    $sql = 'UPDATE users SET username = ?, email = ?, fiscalcode = ?, age = ? WHERE id = ?';
+    $sql = 'UPDATE users SET username = ?, email = ?, fiscalcode = ?, age = ?,avatar=? WHERE id = ?';
     $stm = $conn->prepare($sql);
-    $stm->bind_param('sssii',
+    $stm->bind_param('sssisi',
     $data['username'], 
     $data['email'],
      $data['fiscalcode'],
       $data['age'],
+      $data['avatar'],
       $id
     );
    $res = $stm->execute();
@@ -38,14 +39,15 @@ function updateUser(array $data,int $id): bool
 function storeUser(array $data): int
 {
   $conn = getConnection();
-  $sql = 'INSERT INTO users (username,email,fiscalcode,age) values( ?, ?, ?,?)';
+  $sql = 'INSERT INTO users (username,email,fiscalcode,age,avatar) values( ?, ?, ?,?,?)';
   $stm = $conn->prepare($sql);
   $stm->bind_param(
-    'sssi',
+    'sssis',
     $data['username'],
     $data['email'],
     $data['fiscalcode'],
-    $data['age']
+    $data['age'],
+    $data['avatar']
    
   );
   $stm->execute();

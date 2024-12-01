@@ -172,3 +172,45 @@ function showSessionMsg(){
         require_once 'view/message.php';
     }
 }
+function handleAvatarUpload(array $file,int $userId = null):?string {
+
+    if(!is_uploaded_file($file['tmp_name'])){
+        throw new Exception('Invalid uploaded file');
+
+    }
+    $config = require 'config.php';
+    if($file['error']){
+        switch ($file['error']) {
+            case 1:
+                throw new Exception('Max ini file exceeded:'.ini_get('upload_max_filesize'));
+                
+            case 2:
+                throw new Exception('Max upload file exceeded:' . $config['maxFileSize']);
+
+            default:
+                throw new Exception('Error uploading file:' . $file['error']);
+
+        }
+    }
+    $mimeMap = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/gif' => 'gif'
+    ];
+    
+    $uploadDir = $config['uploadDir'] ?? 'avatar';
+    $uploadDirPath = realpath(__DIR__) .'/'.$uploadDir .'/';
+    $fileinfo = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $fileinfo->file($file['tmp_name']);
+    if(!in_array($mimeType, $config['mimeTyped'] ?? ['image/jpeg'])){
+        return null;
+    }
+    if($file['size'] > $config['maxFileSize']){
+        return null;
+    }
+ //$extension = pathinfo($file['name']);
+ $extension = $mimeMap[$mimeType];
+ $fileName = ($userId?$userId.'_':'').bin2hex(random_bytes(8)).'.'.$extension;
+ $res = move_uploaded_file($file['tmp_name'],$uploadDirPath.$fileName);
+    return $uploadDir.'/'.$fileName;
+}
