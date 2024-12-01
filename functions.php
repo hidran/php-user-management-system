@@ -82,7 +82,7 @@ function insertRandUser($totale, mysqli $conn): void
 /**
  * @var \Mysqli $mysqli
  */
-//insertRandUser(300, $mysqli);
+//insertRandUser(300, getConnection());
 function getUsers(array $params = []): array
 {
 

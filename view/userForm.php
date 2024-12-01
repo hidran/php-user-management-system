@@ -1,8 +1,8 @@
 <?php
 $action = 'store';
 $buttonName = 'SAVE';
-            $formTile = 'INSERT USER';
-if($user && $user['id']){
+$formTile = 'INSERT USER';
+if ($user && $user['id']) {
     $action = 'update';
     $buttonName = 'UPDATE';
     $formTile = 'UPDATE USER';
@@ -13,10 +13,10 @@ foreach ($user as &$value) {
 }
 ?>
 
-<form class="mt-4" action="controller/updateRecord.php" method="post">
+<form enctype="multipart/form-data" class="mt-4" action="controller/updateRecord.php" method="post">
     <input type="hidden" name="id" value="<?= $user['id'] ?>">
-    <input type="hidden" name="action" value="<?=$action?>">
-<h2><?=$formTile?></h2>
+    <input type="hidden" name="action" value="<?= $action ?>">
+    <h2><?= $formTile ?></h2>
     <div class="row mb-3">
         <label for="username" class="col-form-label text-end form-label col-sm-4">User name </label>
         <div class="col-sm-8">
@@ -41,17 +41,22 @@ foreach ($user as &$value) {
             <input id="age" class="form-control" value="<?= $user['age'] ?>" name="age">
         </div>
     </div>
+    <div class="row  mb-3">
+        <label for="avatar" class="col-form-label text-end form-label col-sm-4">Age </label>
+        <div class="col-sm-8">
+            <input type="file" accept=".jpg, .jpeg,.png" id="avatar" class="form-control" value="<?= $user['avatar'] ?>" name="avatar">
+        </div>
     </div>
     <div class="row mt-5 d-flex justify-content-center align-items-sm-center">
         <div class="col-sm-3"></div>
         <div class="col-sm-6 offset-sm-4">
-            <button type="submit" class="btn btn-primary"><?=$buttonName?></button>
+            <button type="submit" class="btn btn-primary"><?= $buttonName ?></button>
 
             <a href="index.php" class="btn btn-secondary">Back to users</a>
-            <?php if($action === 'update'){?>
-            <a href="controller/updateUser.php?action=delete&id=<?= $user['id'] ?>"
-                class="btn btn-danger" onclick="return confirm('Are you sure?')">DELETE</a>
-                <?php } ?>
+            <?php if ($action === 'update') { ?>
+                <a href="controller/updateUser.php?action=delete&id=<?= $user['id'] ?>"
+                    class="btn btn-danger" onclick="return confirm('Are you sure?')">DELETE</a>
+            <?php } ?>
 
         </div>
         <div class="col-sm-3"></div>

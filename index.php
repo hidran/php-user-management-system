@@ -49,6 +49,7 @@ switch ($action) {
                
                
                 $user = [
+                    'avatar' => '',
                     'username'=> '',
                     'email' => '',
                     'fiscalcode' => '',
