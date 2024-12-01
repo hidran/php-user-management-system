@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require '../functions.php';
 require '../model/User.php';
@@ -28,8 +29,13 @@ switch ($action) {
         ];
         $avatarPath = '';
       
-        if ($_FILES['avatar']['name'] && is_uploaded_file($_FILES['avatar']['tmp_name'])) {
-           
+        if ($_FILES['avatar']['name']) {
+           $fileErrors = validateFileUpload($_FILES['avatar']);
+          
+           if(!empty($fileErrors)){
+            setFlashMessage(implode('<br>', $fileErrors));
+                redirectWithParams();
+           }
             $avatarPath = handleAvatarUpload($_FILES['avatar'],$id);
           
         }

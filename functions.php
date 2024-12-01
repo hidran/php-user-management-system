@@ -174,43 +174,88 @@ function showSessionMsg(){
 }
 function handleAvatarUpload(array $file,int $userId = null):?string {
 
-    if(!is_uploaded_file($file['tmp_name'])){
-        throw new Exception('Invalid uploaded file');
-
-    }
+    
     $config = require 'config.php';
-    if($file['error']){
-        switch ($file['error']) {
-            case 1:
-                throw new Exception('Max ini file exceeded:'.ini_get('upload_max_filesize'));
-                
-            case 2:
-                throw new Exception('Max upload file exceeded:' . $config['maxFileSize']);
-
-            default:
-                throw new Exception('Error uploading file:' . $file['error']);
-
-        }
-    }
+    $uploadDir = $config['uploadDir'] ?? 'avatar';
+    $uploadDirPath = realpath(__DIR__) .'/'.$uploadDir .'/';
     $mimeMap = [
         'image/jpeg' => 'jpg',
         'image/png' => 'png',
         'image/gif' => 'gif'
     ];
-    
-    $uploadDir = $config['uploadDir'] ?? 'avatar';
-    $uploadDirPath = realpath(__DIR__) .'/'.$uploadDir .'/';
     $fileinfo = new finfo(FILEINFO_MIME_TYPE);
     $mimeType = $fileinfo->file($file['tmp_name']);
-    if(!in_array($mimeType, $config['mimeTyped'] ?? ['image/jpeg'])){
-        return null;
-    }
-    if($file['size'] > $config['maxFileSize']){
-        return null;
-    }
  //$extension = pathinfo($file['name']);
  $extension = $mimeMap[$mimeType];
  $fileName = ($userId?$userId.'_':'').bin2hex(random_bytes(8)).'.'.$extension;
  $res = move_uploaded_file($file['tmp_name'],$uploadDirPath.$fileName);
-    return $uploadDir.'/'.$fileName;
+    return $res? $uploadDir.'/'.$fileName : null;
+}
+function validateFileUpload(array $file) : array {
+    $errors = [];
+  
+    if($file['error']!== UPLOAD_ERR_OK){
+        $errors[] = getUploadError($file['error']);
+        return $errors;
+    }
+    $config = require 'config.php';
+   
+    $fileinfo = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $fileinfo->file($file['tmp_name']);
+    if (!in_array($mimeType, $config['mimeTyped'] ?? ['image/jpeg'])) {
+        $errors[] = 'Invalid file type.Allowed types: '. implode(',',$config['mimeTypes']);
+    }
+    if ($file['size'] > $config['maxFileSize']) {
+        $errors[] = 'File size exceeds '. $config['maxFileSize'];
+    }
+    return $errors;
+}
+
+function getUploadError(int $errorCode): string {
+$error = '';
+
+    switch ($errorCode) {
+        case UPLOAD_ERR_INI_SIZE:
+        case UPLOAD_ERR_FORM_SIZE:
+             
+            $error = 'File size exceeds the allowed limit.';
+            break;
+        case UPLOAD_ERR_PARTIAL:
+            $error  = 'The file was only partially uploaded.';
+            break;
+        case UPLOAD_ERR_NO_FILE:
+            $error  = 'No file was uploaded.';
+            break;
+        case UPLOAD_ERR_NO_TMP_DIR:
+            $error  = 'Missing temporary folder.';
+            break;
+        case UPLOAD_ERR_CANT_WRITE:
+            $error = 'Failed to write file to disk.';
+            break;
+        case UPLOAD_ERR_EXTENSION:
+            $error  = 'File upload stopped by extension.';
+            break;
+        default:
+            $error = 'Unknown file upload error.';
+            break;
+    }
+    return $error;
+}
+
+function setFlashMessage(string $message, string $type = 'info')
+{
+    $_SESSION['message'] = $message;
+    $_SESSION['messageType'] = $type;
+}
+
+function redirectWithParams(): void {
+    $params = $_GET;
+    if(isset($params['id']))
+    unset($params['id']);
+    if(isset($params['action'])){
+            unset($params['action']);  
+    }
+    $queryString = http_build_query($params);
+    header('Location:../index.php?' . $queryString);
+    exit;
 }
