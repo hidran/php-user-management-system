@@ -259,3 +259,31 @@ function redirectWithParams(): void {
     header('Location:../index.php?' . $queryString);
     exit;
 }
+function convertMaxUploadSizeToBytes():int{
+    $maxUploadSize = ini_get('upload_max_filesize');// 2M, 2G
+    $number = (int)$maxUploadSize;
+    $unit = strtoupper(substr($maxUploadSize, -1));
+  
+    switch ($unit) {
+        case 'G':
+            $number = $number* (1024**3);
+            break;
+        case 'M':
+            $number = $number * (1024 ** 2);
+            break;
+            case 'K':
+            $number = $number * 1024;
+            break;
+       
+    }
+
+    return $number;
+}
+function formatBytes(int $bytes): string {
+    //20970000 
+    $units = ['Bytes','Kilobytes','Megabytes','Gigabytes']; 
+    $power = floor(log($bytes,1024));
+    $number = round($bytes/1024**$power,2);
+    return $number. ' '.$units[$power];
+
+}

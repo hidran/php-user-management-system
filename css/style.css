@@ -1,6 +1,5 @@
 body {
     font-family: 'Noto Sans', Georgia, Helvetica, sans-serif;
-   
 }
 i.fa-solid {
     margin-right: 5px;
@@ -17,12 +16,11 @@ i.fa-solid {
     content: '↓';
 }
 
-a.disabled{
+a.disabled {
     background-color: blue;
 }
 .fade-out {
-  opacity: 0;
- 
-  transition: opacity 2s ease-out;
-  
+    opacity: 0;
+
+    transition: opacity 2s ease-out;
 }
