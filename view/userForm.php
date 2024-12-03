@@ -44,13 +44,15 @@ foreach ($user as &$value) {
     <div class="row  mb-3">
         <label for="avatar" class="col-form-label text-end form-label col-sm-4">Avatar </label>
         <div class="col-sm-8">
+            <input type="hidden" name="oldAvatar" value="<?= $user['avatar'] ?>">
+
             <input type="hidden" name="MAX_FILE_SIZE" value="<?= getConfig('maxFileSize') ?>">
             <input type="file" accept="<?= implode(',', getConfig('mimeTypes')) ?>" id="avatar" class="form-control" value="<?= $user['avatar'] ?>" name="avatar">
         </div>
 
         <div class="row alert alert-info col-sm-8 offset-md-4 mt-3">
             <p>Image types : <?= implode(',', getConfig('mimeTypes')) ?>,
-                Max fili size: <?= formatBytes(getConfig('maxFileSize')) ?></p>
+                Max file size: <?= formatBytes(getConfig('maxFileSize')) ?></p>
         </div>
     </div>
     <div class="row mt-5 d-flex justify-content-center align-items-sm-center">

@@ -19,15 +19,21 @@ switch ($action) {
         break;
     case 'update':
         $id = (int)$_POST['id'];
-
+        $avatarPath = $_POST['oldAvatar'];
         $userData = [
             'id' => $id,
             'username' => trim($_POST['username']),
             'email' => trim($_POST['email']),
             'fiscalcode' => trim($_POST['fiscalcode']),
             'age' => (int)$_POST['age']
+
         ];
-        $avatarPath = '';
+        $errors = validateUserData($userData);
+        if ($errors) {
+            setFlashMessage(implode(',', $errors));
+            redirectWithParams();
+        }
+
 
         if ($_FILES['avatar']['name']) {
             $fileErrors = validateFileUpload($_FILES['avatar']);
@@ -36,7 +42,10 @@ switch ($action) {
                 setFlashMessage(implode('<br>', $fileErrors));
                 redirectWithParams();
             }
-            $avatarPath = handleAvatarUpload($_FILES['avatar'], $id);
+            $res = handleAvatarUpload($_FILES['avatar'], $id);
+            if ($res) {
+                $avatarPath = $res;
+            }
         }
         $userData['avatar'] = $avatarPath;
         // dd($userData['fiscalcode'], strlen($userData['fiscalcode']));
@@ -62,6 +71,11 @@ switch ($action) {
             'age' => (int)$_POST['age'],
             'avatar' => null
         ];
+        $errors = validateUserData($userData);
+        if ($errors) {
+            setFlashMessage(implode(',', $errors));
+            redirectWithParams();
+        }
         $avatarPath = '';
         if ($_FILES['avatar']['name'] && is_uploaded_file($_FILES['avatar']['tmp_name'])) {
             $avatarPath = handleAvatarUpload($_FILES['avatar']);

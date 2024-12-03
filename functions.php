@@ -16,10 +16,20 @@ function getParam($param, $default = '')
 function getRandName(): string
 {
     $names = [
-        'ROBERTO', 'GIOVANNI', 'GIULIA', 'MARIO', 'ALE'
+        'ROBERTO',
+        'GIOVANNI',
+        'GIULIA',
+        'MARIO',
+        'ALE'
     ];
     $lastnames = [
-        'ROSSI', 'RE', 'ARIAS', 'SMITH', 'MENDOZA', 'CRUZ', 'WILDE'
+        'ROSSI',
+        'RE',
+        'ARIAS',
+        'SMITH',
+        'MENDOZA',
+        'CRUZ',
+        'WILDE'
 
     ];
 
@@ -113,7 +123,7 @@ function getUsers(array $params = []): array
     }
 
     $sql .= " ORDER BY $orderBy $orderDir  LIMIT  $start,$limit ";
-     // echo $sql;
+    // echo $sql;
     $res = $conn->query($sql);
     if ($res) {
 
@@ -158,12 +168,13 @@ function getTotalUserCount(string $search = ''): int
     return 0;
 }
 
-function dd(mixed ...$data )
+function dd(mixed ...$data)
 {
     var_dump($data);
     die;
 }
-function showSessionMsg(){
+function showSessionMsg()
+{
     if (!empty($_SESSION['message'])) {
         $message = $_SESSION['message'];
         unset($_SESSION['message']);
@@ -172,12 +183,13 @@ function showSessionMsg(){
         require_once 'view/message.php';
     }
 }
-function handleAvatarUpload(array $file,int $userId = null):?string {
+function handleAvatarUpload(array $file, int $userId = null): ?string
+{
 
-    
+
     $config = require 'config.php';
     $uploadDir = $config['uploadDir'] ?? 'avatar';
-    $uploadDirPath = realpath(__DIR__) .'/'.$uploadDir .'/';
+    $uploadDirPath = realpath(__DIR__) . '/' . $uploadDir . '/';
     $mimeMap = [
         'image/jpeg' => 'jpg',
         'image/png' => 'png',
@@ -185,39 +197,41 @@ function handleAvatarUpload(array $file,int $userId = null):?string {
     ];
     $fileinfo = new finfo(FILEINFO_MIME_TYPE);
     $mimeType = $fileinfo->file($file['tmp_name']);
- //$extension = pathinfo($file['name']);
- $extension = $mimeMap[$mimeType];
- $fileName = ($userId?$userId.'_':'').bin2hex(random_bytes(8)).'.'.$extension;
- $res = move_uploaded_file($file['tmp_name'],$uploadDirPath.$fileName);
-    return $res? $uploadDir.'/'.$fileName : null;
+    //$extension = pathinfo($file['name']);
+    $extension = $mimeMap[$mimeType];
+    $fileName = ($userId ? $userId . '_' : '') . bin2hex(random_bytes(8)) . '.' . $extension;
+    $res = move_uploaded_file($file['tmp_name'], $uploadDirPath . $fileName);
+    return $res ? $uploadDir . '/' . $fileName : null;
 }
-function validateFileUpload(array $file) : array {
+function validateFileUpload(array $file): array
+{
     $errors = [];
-  
-    if($file['error']!== UPLOAD_ERR_OK){
+
+    if ($file['error'] !== UPLOAD_ERR_OK) {
         $errors[] = getUploadError($file['error']);
         return $errors;
     }
     $config = require 'config.php';
-   
+
     $fileinfo = new finfo(FILEINFO_MIME_TYPE);
     $mimeType = $fileinfo->file($file['tmp_name']);
     if (!in_array($mimeType, $config['mimeTyped'] ?? ['image/jpeg'])) {
-        $errors[] = 'Invalid file type.Allowed types: '. implode(',',$config['mimeTypes']);
+        $errors[] = 'Invalid file type.Allowed types: ' . implode(',', $config['mimeTypes']);
     }
     if ($file['size'] > $config['maxFileSize']) {
-        $errors[] = 'File size exceeds '. $config['maxFileSize'];
+        $errors[] = 'File size exceeds ' . $config['maxFileSize'];
     }
     return $errors;
 }
 
-function getUploadError(int $errorCode): string {
-$error = '';
+function getUploadError(int $errorCode): string
+{
+    $error = '';
 
     switch ($errorCode) {
         case UPLOAD_ERR_INI_SIZE:
         case UPLOAD_ERR_FORM_SIZE:
-             
+
             $error = 'File size exceeds the allowed limit.';
             break;
         case UPLOAD_ERR_PARTIAL:
@@ -248,42 +262,63 @@ function setFlashMessage(string $message, string $type = 'info')
     $_SESSION['messageType'] = $type;
 }
 
-function redirectWithParams(): void {
+function redirectWithParams(): void
+{
     $params = $_GET;
-    if(isset($params['id']))
-    unset($params['id']);
-    if(isset($params['action'])){
-            unset($params['action']);  
+    if (isset($params['id']))
+        unset($params['id']);
+    if (isset($params['action'])) {
+        unset($params['action']);
     }
     $queryString = http_build_query($params);
     header('Location:../index.php?' . $queryString);
     exit;
 }
-function convertMaxUploadSizeToBytes():int{
-    $maxUploadSize = ini_get('upload_max_filesize');// 2M, 2G
+function convertMaxUploadSizeToBytes(): int
+{
+    $maxUploadSize = ini_get('upload_max_filesize'); // 2M, 2G
     $number = (int)$maxUploadSize;
     $unit = strtoupper(substr($maxUploadSize, -1));
-  
+
     switch ($unit) {
         case 'G':
-            $number = $number* (1024**3);
+            $number = $number * (1024 ** 3);
             break;
         case 'M':
             $number = $number * (1024 ** 2);
             break;
-            case 'K':
+        case 'K':
             $number = $number * 1024;
             break;
-       
     }
 
     return $number;
 }
-function formatBytes(int $bytes): string {
+function formatBytes(int $bytes): string
+{
     //20970000 
-    $units = ['Bytes','Kilobytes','Megabytes','Gigabytes']; 
-    $power = floor(log($bytes,1024));
-    $number = round($bytes/1024**$power,2);
-    return $number. ' '.$units[$power];
-
+    $units = ['Bytes', 'Kilobytes', 'Megabytes', 'Gigabytes'];
+    $power = floor(log($bytes, 1024));
+    $number = round($bytes / 1024 ** $power, 2);
+    return $number . ' ' . $units[$power];
+}
+function validateUserData(array $data): array
+{
+    $errors = [];
+    if (
+        empty($data['username']) || strlen($data['username']) > 64
+        || strlen($data['username']) < 3
+    ) {
+        $errors['username'] = 'Invalid username: must be non-empty and min 3 and max 64 chars.';
+    }
+    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Invalid email format.';
+    }
+    if (empty($data['fiscalcode']) || strlen($data['fiscalcode']) !== 16) {
+        $errors['fiscalcode'] = 'Fiscal code must be exactly 16 characters.';
+    }
+    if ($data['age'] < 18 || $data['age'] > 120) {
+        $errors['age'] = 'Age must be between 18 and 120.';
+    }
+    return $errors;
 }
