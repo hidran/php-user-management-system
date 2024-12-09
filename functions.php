@@ -334,40 +334,72 @@ function createThumbnailAndIntermediate(string $originalPath): void
     $thumbnailWidth = $config['thumbnailWidth'] ?? 120;
     $intermediateWidth = $config['intermediateWidth'] ?? 600;
     $mimeType = mime_content_type($originalPath);
+    $fileName = basename($originalPath);
     $targetDir = getUploadDirPath();
-    $thumbnailPath = $targetDir . '/thumbnail_' . basename($originalPath);
-    $intermediatePath = $targetDir . '/intermediate_' . basename($originalPath);
+    $sourcePath = $targetDir . $fileName;
+    $thumbnailPath = $targetDir . '/thumbnail_' . $fileName;
+    $intermediatePath = $targetDir . '/intermediate_' . $fileName;
+    resizeImage($sourcePath, $thumbnailPath, $thumbnailWidth, $mimeType);
+
+    // Create Intermediate Image
+    resizeImage($sourcePath, $intermediatePath, $intermediateWidth, $mimeType);
+}
+
+function resizeImage(string $sourcePath, string $destinationPath, int $newWidth, string $mimeType): void
+{
+    // Load the source image
     switch ($mimeType) {
         case 'image/jpeg':
-            $image = imagecreatefromjpeg($originalPath);
+            $sourceImage = imagecreatefromjpeg($sourcePath);
             break;
         case 'image/png':
-            $image = imagecreatefrompng($originalPath);
+            $sourceImage = imagecreatefrompng($sourcePath);
             break;
         case 'image/gif':
-            $image = imagecreatefromgif($originalPath);
+            $sourceImage = imagecreatefromgif($sourcePath);
             break;
         default:
             return;
     }
-    $originalWidth = imagesx($image);
-    $originalHeight = imagesy($image);
-    $newHeight = ($thumbnailWidth / $originalWidth) * $originalHeight;
-    $resizedThumbnail = imagecreatetruecolor($thumbnailWidth, $newHeight);
-    imagecopyresampled($resizedThumbnail, $image, 0, 0, 0, 0, $thumbnailWidth, $newHeight, $originalWidth, $originalHeight);
+
+    // Get original dimensions
+    $originalWidth = imagesx($sourceImage);
+    $originalHeight = imagesy($sourceImage);
+
+    // Calculate new dimensions
+    $newHeight = (int)(($newWidth / $originalWidth) * $originalHeight);
+
+    // Create a new resized image
+    $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+    // Copy and resize
+    imagecopyresampled(
+        $resizedImage,
+        $sourceImage,
+        0,
+        0,
+        0,
+        0,
+        $newWidth,
+        $newHeight,
+        $originalWidth,
+        $originalHeight
+    );
+
+    // Save the resized image
     switch ($mimeType) {
         case 'image/jpeg':
-            imagejpeg($resizedThumbnail, $thumbnailPath);
+            imagejpeg($resizedImage, $destinationPath, 90); // Quality 90 for JPG
             break;
         case 'image/png':
-            imagepng($resizedThumbnail, $thumbnailPath);
+            imagepng($resizedImage, $destinationPath);
             break;
         case 'image/gif':
-            imagegif($resizedThumbnail, $thumbnailPath);
+            imagegif($resizedImage, $destinationPath);
             break;
-        default:
-            return;
     }
-    imagedestroy($resizedThumbnail);
-    imagedestroy($image);
+
+    // Free memory
+    imagedestroy($sourceImage);
+    imagedestroy($resizedImage);
 }
