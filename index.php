@@ -1,6 +1,4 @@
 <?php
-phpinfo();
-die;
 session_start();
 require_once 'connection.php';
 // for dev purposes
