@@ -2,10 +2,10 @@
 
 $params = [
     'orderBy' => $orderBy,
-    'recordsPerPage' => $recordsPerPage,
+    'recordsPerPage' => $recordsPerPage ?? 10,
     'orderDir' => $currentOrderDir,
     'search' => $search,
-    'page' => $currentPage
+    'page' => $currentPage ?? 1
 ];
 $totalRecords = getTotalUserCount($search);
 

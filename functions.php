@@ -183,13 +183,18 @@ function showSessionMsg()
         require_once 'view/message.php';
     }
 }
-function handleAvatarUpload(array $file, int $userId = null): ?string
+function getUploadDirPath(): string
 {
-
-
     $config = require 'config.php';
     $uploadDir = $config['uploadDir'] ?? 'avatar';
     $uploadDirPath = realpath(__DIR__) . '/' . $uploadDir . '/';
+    return $uploadDirPath;
+}
+function handleAvatarUpload(array $file, ?int $userId = null): ?string
+{
+    $config = require 'config.php';
+    $uploadDir = $config['uploadDir'] ?? 'avatar';
+    $uploadDirPath = getUploadDirPath();
     $mimeMap = [
         'image/jpeg' => 'jpg',
         'image/png' => 'png',
@@ -321,4 +326,48 @@ function validateUserData(array $data): array
         $errors['age'] = 'Age must be between 18 and 120.';
     }
     return $errors;
+}
+function createThumbnailAndIntermediate(string $originalPath): void
+{
+    $config = require 'config.php';
+    $targetDir = $config['uploadDir'] ?? 'uploads';
+    $thumbnailWidth = $config['thumbnailWidth'] ?? 120;
+    $intermediateWidth = $config['intermediateWidth'] ?? 600;
+    $mimeType = mime_content_type($originalPath);
+    $targetDir = getUploadDirPath();
+    $thumbnailPath = $targetDir . '/thumbnail_' . basename($originalPath);
+    $intermediatePath = $targetDir . '/intermediate_' . basename($originalPath);
+    switch ($mimeType) {
+        case 'image/jpeg':
+            $image = imagecreatefromjpeg($originalPath);
+            break;
+        case 'image/png':
+            $image = imagecreatefrompng($originalPath);
+            break;
+        case 'image/gif':
+            $image = imagecreatefromgif($originalPath);
+            break;
+        default:
+            return;
+    }
+    $originalWidth = imagesx($image);
+    $originalHeight = imagesy($image);
+    $newHeight = ($thumbnailWidth / $originalWidth) * $originalHeight;
+    $resizedThumbnail = imagecreatetruecolor($thumbnailWidth, $newHeight);
+    imagecopyresampled($resizedThumbnail, $image, 0, 0, 0, 0, $thumbnailWidth, $newHeight, $originalWidth, $originalHeight);
+    switch ($mimeType) {
+        case 'image/jpeg':
+            imagejpeg($resizedThumbnail, $thumbnailPath);
+            break;
+        case 'image/png':
+            imagepng($resizedThumbnail, $thumbnailPath);
+            break;
+        case 'image/gif':
+            imagegif($resizedThumbnail, $thumbnailPath);
+            break;
+        default:
+            return;
+    }
+    imagedestroy($resizedThumbnail);
+    imagedestroy($image);
 }
