@@ -33,40 +33,40 @@ require_once 'view/nav.php';
 
 <!-- Begin page content -->
 <main class='flex-shrink-0'>
-	<div class='container text-center'>
-		<h1>USER MANAGEMENT SYSTEM</h1>
-		<?php
-          showSessionMsg();
-$action = getParam('action');
-switch ($action) {
-    case 'edit':
-        require_once 'model/User.php';
-        $id = getParam('id');
-        $user = getUserById($id);
-        require_once 'view/userForm.php';
-        break;
+    <div class='container text-center'>
+        <h1>USER MANAGEMENT SYSTEM</h1>
+        <?php
+        showSessionMsg();
+        $action = getParam('action');
+        switch ($action) {
+            case 'edit':
+                require_once 'model/User.php';
+                $id = getParam('id');
+                $user = getUserById($id);
+                require_once 'view/userForm.php';
+                break;
             case 'insert':
-               
-               
+
+
                 $user = [
                     'avatar' => '',
-                    'username'=> '',
+                    'username' => '',
                     'email' => '',
                     'fiscalcode' => '',
                     'age' => 0,
-                    'id'=> 0
+                    'id' => 0
 
                 ];
                 require_once 'view/userForm.php';
                 break;
-    default:
-        require_once 'controller/displayUsers.php';
-        break;
-}
+            default:
+                require_once 'controller/displayUsers.php';
+                break;
+        }
 
-?>
+        ?>
 
-	</div>
+    </div>
 </main>
 
 <?php
