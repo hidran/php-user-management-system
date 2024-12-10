@@ -55,11 +55,24 @@ $totalPages = (int)ceil($totalRecords / $recordsPerPage);
                     <td><?= $user['fiscalcode'] ?></td>
                     <td><a href="mailto:<?= $user['email'] ?>"> <?= $user['email'] ?></a></td>
                     <td><?= $user['age'] ?></td>
-                    <td><?php 
-                        if($user['avatar']){ ?>
-                            <img width="150" src="<?= $user['avatar']?>" alt="avatar">
-                       <?php }
-                    ?></td>
+                    <td><?php
+
+                        if ($user['avatar']) {
+                            $thumbnailFileName = 'thumbnail_' . basename($user['avatar']);
+                            $thumbnail = getUploadDirPath() .  $thumbnailFileName;
+
+                            $thumbnailWidth = getConfig('thumbnailWidth', 120);
+                            if (file_exists($thumbnail)) {
+                                $thumbnailUrl = trim(getConfig('uploadDir', 'uploads/'), '/') . '/' . $thumbnailFileName;
+                        ?>
+                                <img width="<?= $thumbnailWidth ?>" src="<?= $thumbnailUrl ?>" alt="avatar">
+                            <?php } else { ?>
+                                ?>
+                                <img width="<?= $thumbnailWidth ?>" src="<?= $user['avatar'] ?>" alt="avatar">
+                        <?php }
+                        }
+                        ?>
+                    </td>
                     <td>
                         <div class="row">
                             <div class="col-6">

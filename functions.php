@@ -333,10 +333,11 @@ function createThumbnailAndIntermediate(string $originalPath): void
     $targetDir = $config['uploadDir'] ?? 'uploads';
     $thumbnailWidth = $config['thumbnailWidth'] ?? 120;
     $intermediateWidth = $config['intermediateWidth'] ?? 600;
-    $mimeType = mime_content_type($originalPath);
+
     $fileName = basename($originalPath);
     $targetDir = getUploadDirPath();
     $sourcePath = $targetDir . $fileName;
+    $mimeType = mime_content_type($sourcePath);
     $thumbnailPath = $targetDir . '/thumbnail_' . $fileName;
     $intermediatePath = $targetDir . '/intermediate_' . $fileName;
     resizeImage($sourcePath, $thumbnailPath, $thumbnailWidth, $mimeType);

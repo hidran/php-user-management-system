@@ -80,6 +80,9 @@ switch ($action) {
         $avatarPath = '';
         if ($_FILES['avatar']['name'] && is_uploaded_file($_FILES['avatar']['tmp_name'])) {
             $avatarPath = handleAvatarUpload($_FILES['avatar']);
+            if ($avatarPath) {
+                createThumbnailAndIntermediate($avatarPath);
+            }
         }
         $userData['avatar'] = $avatarPath;
         $res = storeUser($userData);
