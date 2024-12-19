@@ -9,7 +9,7 @@ if ($user && $user['id']) {
 }
 foreach ($user as &$value) {
 
-    $value = htmlspecialchars($value);
+    $value = htmlspecialchars($value ?? '');
 }
 ?>
 
@@ -55,6 +55,19 @@ foreach ($user as &$value) {
                 Max file size: <?= formatBytes(getConfig('maxFileSize')) ?></p>
         </div>
     </div>
+    <div class="row mb-3">
+        <div class="col-sm-8 offset-sm-4">
+            <?php
+
+            $fileData = getImgThumbNail($user['avatar'], 'm');
+            $avatar = $fileData['avatar'];
+
+            ?>
+            <img id="preview" src="<?= $fileData['avatar'] ? htmlspecialchars($fileData['avatar']) : '' ?>"
+                style="width:<?= $fileData['width'] ?>px;<?= $fileData['avatar'] ? '' : 'display:none' ?>">
+
+        </div>
+    </div>
     <div class="row mt-5 d-flex justify-content-center align-items-sm-center">
         <div class="col-sm-3"></div>
         <div class="col-sm-6 offset-sm-4">
@@ -70,3 +83,23 @@ foreach ($user as &$value) {
         <div class="col-sm-3"></div>
     </div>
 </form>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const avatar = '<?= $avatar ?>';
+        const avatarInput = document.getElementById('avatar');
+        const preview = document.getElementById('preview');
+        avatarInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = '';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = avatar;
+            }
+        });
+    });
+</script>

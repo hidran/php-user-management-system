@@ -45,6 +45,7 @@ switch ($action) {
             $res = handleAvatarUpload($_FILES['avatar'], $id);
             if ($res) {
                 $avatarPath = $res;
+                createThumbnailAndIntermediate($avatarPath);
             }
         }
         $userData['avatar'] = $avatarPath;

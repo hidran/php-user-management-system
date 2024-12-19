@@ -2,7 +2,10 @@
 FROM php:8.4-apache
 
 # Install the mysqli extension and any dependencies
-RUN docker-php-ext-install mysqli
+
+RUN apt-get update && apt-get install -y libjpeg-dev libpng-dev libfreetype6-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-freetype \
+    && docker-php-ext-install gd && docker-php-ext-install mysqli
 
 # Enable mod_rewrite (if needed for your project)
 RUN a2enmod rewrite

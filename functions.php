@@ -183,7 +183,7 @@ function showSessionMsg()
         require_once 'view/message.php';
     }
 }
-function handleAvatarUpload(array $file, int $userId = null): ?string
+function handleAvatarUpload(array $file, ?int $userId = null): ?string
 {
 
 
@@ -255,6 +255,106 @@ function getUploadError(int $errorCode): string
     }
     return $error;
 }
+function getUploadDir(): string
+{
+    $uploadDir = getConfig('uploadDir', 'avatar');
+    $uploadDir = realpath(__DIR__) . '/' . trim($uploadDir, '/') . '/';
+    return $uploadDir;
+}
+function createThumbnailAndIntermediate(string $avatarPath): void
+{
+    $config = require 'config.php';
+    $fileName = basename($avatarPath);
+    $uploadDirPath = getUploadDir();
+    $thumbnailPath = $uploadDirPath . 'thumbnail_' . $fileName;
+    $intermediatePath = $uploadDirPath . 'intermediate_' . $fileName;
+    $sourcePath = $uploadDirPath . $fileName;
+    $thumbnailWidth = $config['thumbnailWidth'] ?? 120;
+    $intermediateWidth = $config['intermediateWidth'] ?? 800;
+    $mimeType = mime_content_type($sourcePath);
+    resizeImage($sourcePath, $thumbnailPath, $thumbnailWidth, $mimeType);
+    resizeImage($sourcePath, $intermediatePath, $intermediateWidth, $mimeType);
+}
+
+
+
+
+
+
+
+
+
+
+
+function resizeImage(string $sourcePath, string $targetPath, int $width, string $mimeType): void
+{
+
+    switch ($mimeType) {
+        case 'image/jpeg':
+            $sourceImage = imagecreatefromjpeg($sourcePath);
+            break;
+        case 'image/png':
+            $sourceImage = imagecreatefrompng($sourcePath);
+            break;
+        case 'image/gif':
+            $sourceImage = imagecreatefromgif($sourcePath);
+            break;
+        default:
+            return;
+    }
+    $originalWidth = imagesx($sourceImage);
+    $originalHeight = imagesy($sourceImage); // 2000 * 120/3000
+    $newHeight = floor($originalHeight * ($width / $originalWidth));
+    $newImage = imagecreatetruecolor($width, $newHeight);
+    imagecopyresampled(
+        $newImage,
+        $sourceImage,
+        0,
+        0,
+        0,
+        0,
+        $width,
+        $newHeight,
+        $originalWidth,
+        $originalHeight
+    );
+
+    switch ($mimeType) {
+        case 'image/jpeg':
+            imagejpeg($newImage, $targetPath, getConfig('jpegQuality', 90));
+            break;
+        case 'image/png':
+            imagepng($newImage, $targetPath);
+            break;
+        case 'image/gif':
+            imagegif($newImage, $targetPath);
+            break;
+        default:
+            return;
+    }
+
+    imagedestroy($sourceImage);
+    imagedestroy($newImage);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function setFlashMessage(string $message, string $type = 'info')
 {
@@ -321,4 +421,21 @@ function validateUserData(array $data): array
         $errors['age'] = 'Age must be between 18 and 120.';
     }
     return $errors;
+}
+function getImgThumbNail(string $path, string $size = 's'): array
+{
+    $imgWidth = getConfig($size === 's' ? 'thumbnailWidth' : 'intermediateWidth', 120);
+    $fileData = ['width' => $imgWidth, 'avatar' => ''];
+    $prefix = $size === 's' ? 'thumbnail_' : 'intermediate_';
+    $fileName = $prefix . basename($path);
+    $thumbnail = getConfig('uploadDir', 'avatar')
+        . '/' . $fileName;
+
+    $uploadDir  = getUploadDir() . '/' . $fileName;
+    if (file_exists($uploadDir)) {
+        $fileData['avatar'] = $thumbnail;
+        $fileData['width'] = $imgWidth;
+    }
+
+    return $fileData;
 }

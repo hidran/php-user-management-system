@@ -11,9 +11,16 @@ return [
     ['id', 'username', 'fiscalcode', 'age', 'email'],
     'recordsPerPageOptions' =>
     [
-        5, 10, 15, 20, 50, 100
+        5,
+        10,
+        15,
+        20,
+        50,
+        100
     ],
     'uploadDir' => 'avatar',
     'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif'],
-    'maxFileSize' => convertMaxUploadSizeToBytes()
+    'maxFileSize' => convertMaxUploadSizeToBytes(),
+    'thumbnailWidth' => 120,
+    'intermediateWidth' => 800
 ];
