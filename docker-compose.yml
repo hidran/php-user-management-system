@@ -28,7 +28,7 @@ services:
             MYSQL_DATABASE: corsophp
             MYSQL_PASSWORD: hidran
         volumes:
-            - db_data:/var/lib/mysql
+            - db_data_mysql:/var/lib/mysql
             - ./data:/docker-entrypoint-initdb.d/ # Mount the data folder
         ports:
             - '3309:3306'
@@ -38,7 +38,7 @@ services:
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin
+        #container_name: phpmyadmin
         environment:
             PMA_HOST: db
             MYSQL_ROOT_PASSWORD: hidran
@@ -49,7 +49,7 @@ services:
         restart: always
 
 volumes:
-    db_data:
+    db_data_mysql:
 
 networks:
     app-network:

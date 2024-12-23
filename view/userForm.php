@@ -75,7 +75,7 @@ foreach ($user as &$value) {
 
             <a href="index.php" class="btn btn-secondary">Back to users</a>
             <?php if ($action === 'update') { ?>
-                <a href="controller/updateUser.php?action=delete&id=<?= $user['id'] ?>"
+                <a href="controller/updateRecord.php?action=delete&id=<?= $user['id'] ?>"
                     class="btn btn-danger" onclick="return confirm('Are you sure?')">DELETE</a>
             <?php } ?>
 

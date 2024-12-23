@@ -9,6 +9,8 @@
           `fiscalcode` char(16) COLLATE utf8_unicode_ci NOT NULL,
 
           `age` smallint(3) UNSIGNED NOT NULL,
+          `avatar` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+
 
           UNIQUE KEY `u_fiscalcode` (`fiscalcode`),
 

@@ -7,7 +7,18 @@ $action = getParam('action');
 switch ($action) {
     case 'delete':
         $id = (int)getParam('id', 0);
+        $user = getUserById($id);
+        if (!$user) {
+            setFlashMessage('USER NOT FOUND');
+            redirectWithParams();
+        }
+
         $res = deleteUser($id);
+        if ($res) {
+            if ($user && $user['avatar']) {
+                deleteUserImages($user['avatar']);
+            }
+        }
         $message = $res ? 'USER ' . $id . ' DELETED'
             : 'ERROR DELETING USER ' . $id;
         $_SESSION['message'] = $message;
@@ -44,6 +55,7 @@ switch ($action) {
             }
             $res = handleAvatarUpload($_FILES['avatar'], $id);
             if ($res) {
+                deleteUserImages($avatarPath);
                 $avatarPath = $res;
                 createThumbnailAndIntermediate($avatarPath);
             }
@@ -80,6 +92,9 @@ switch ($action) {
         $avatarPath = '';
         if ($_FILES['avatar']['name'] && is_uploaded_file($_FILES['avatar']['tmp_name'])) {
             $avatarPath = handleAvatarUpload($_FILES['avatar']);
+            if ($avatarPath) {
+                createThumbnailAndIntermediate($avatarPath);
+            }
         }
         $userData['avatar'] = $avatarPath;
         $res = storeUser($userData);

@@ -439,3 +439,23 @@ function getImgThumbNail(string $path, string $size = 's'): array
 
     return $fileData;
 }
+function deleteUserImages(string $avatarPath): void
+{
+    if (!$avatarPath) {
+        return;
+    }
+    $uploadDir = getUploadDir();
+    $fileName = basename($avatarPath);
+    $avatarFile = $uploadDir . $fileName;
+    $thumbnail = $uploadDir . 'thumbnail_' . $fileName;
+    $intermediate = $uploadDir . 'intermediate_' . $fileName;
+    if (file_exists($avatarFile)) {
+        unlink($avatarFile);
+    }
+    if (file_exists($thumbnail)) {
+        unlink($thumbnail);
+    }
+    if (file_exists($intermediate)) {
+        unlink($intermediate);
+    }
+}
