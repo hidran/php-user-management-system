@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require_once 'connection.php';
 // for dev purposes
@@ -25,7 +26,7 @@ $currentPage = getParam('page', 1);
 if (!in_array($currentOrderDir, ['ASC', 'DESC'])) {
     $currentOrderDir = 'DESC';
 }
-$orderBy = in_array($orderBy, $orderByColumns) ? $orderBy : null;
+$orderBy = in_array($orderBy, $orderByColumns, false) ? $orderBy : null;
 
 require_once 'view/top.php';
 require_once 'view/nav.php';
@@ -49,12 +50,12 @@ require_once 'view/nav.php';
 
 
                 $user = [
-                    'avatar' => '',
-                    'username' => '',
-                    'email' => '',
-                    'fiscalcode' => '',
-                    'age' => 0,
-                    'id' => 0
+                        'avatar' => '',
+                        'username' => '',
+                        'email' => '',
+                        'fiscalcode' => '',
+                        'age' => 0,
+                        'id' => 0
 
                 ];
                 require_once 'view/userForm.php';

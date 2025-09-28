@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 
 function deleteUser(int $id): bool
 {
@@ -25,16 +27,33 @@ function getUserById(int $id): array
 function updateUser(array $data, int $id): bool
 {
     $conn = getConnection();
-    $sql = 'UPDATE users SET username = ?, email = ?, fiscalcode = ?, age = ?,avatar=? WHERE id = ?';
-    $stm = $conn->prepare($sql);
-    $stm->bind_param(
-        'sssisi',
+    $types = 'sssis';
+    $values = [
         $data['username'],
         $data['email'],
         $data['fiscalcode'],
         $data['age'],
-        $data['avatar'],
-        $id
+        $data['avatar']
+    ];
+    $sql = 'UPDATE users SET username = ?, email = ?, fiscalcode = ?, age = ?,avatar=? ';
+    if ($data['password']) {
+        $sql .= ', password = ? ';
+        $types .= 's';
+        $values[] = password_hash($data['password'], PASSWORD_DEFAULT);
+    }
+    if ($data['role_type']) {
+        $sql .= ', role_type = ? ';
+        $types .= 's';
+        $values[] = $data['role_type'];
+    }
+    $values[] = $id;
+    $sql .= ' WHERE id = ?';
+    $types .= 'i';
+    $stm = $conn->prepare($sql);
+    $stm->bind_param(
+        $types,
+        ...$values
+
     );
     $res = $stm->execute();
 
@@ -45,15 +64,18 @@ function updateUser(array $data, int $id): bool
 function storeUser(array $data): int
 {
     $conn = getConnection();
-    $sql = 'INSERT INTO users (username,email,fiscalcode,age,avatar) values( ?, ?, ?,?,?)';
+    $sql = 'INSERT INTO users (username,email,fiscalcode,age,avatar, password,role_type) values( ?, ?, ?,?,?,?,?)';
     $stm = $conn->prepare($sql);
+    $password = password_hash($data['password'], PASSWORD_DEFAULT);
     $stm->bind_param(
-        'sssis',
+        'sssisss',
         $data['username'],
         $data['email'],
         $data['fiscalcode'],
         $data['age'],
-        $data['avatar']
+        $data['avatar'],
+        $password,
+        $data['role_type']
 
     );
     $stm->execute();

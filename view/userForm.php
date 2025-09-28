@@ -42,13 +42,13 @@ foreach ($user as &$value) {
         </div>
     </div>
     <div class='row  mb-3'>
-        <label for='age' class='col-form-label text-end form-label col-sm-4'>Password </label>
+        <label for='password' class='col-form-label text-end form-label col-sm-4'>Password </label>
         <div class='col-sm-8'>
             <input id='password' class='form-control' value="" name='password'>
         </div>
     </div>
     <div class='row  mb-3'>
-        <label for='age' class='col-form-label text-end form-label col-sm-4'>Role type </label>
+        <label for='role_type' class='col-form-label text-end form-label col-sm-4'>Role type </label>
         <div class='col-sm-8'>
             <select id='role_type' class='form-control' value='' name='role_type' required>
                 <option value="">Select role type</option>
@@ -57,7 +57,7 @@ foreach ($user as &$value) {
                 $selectedRole = $user['role_type'] ?? '';
                 foreach ($roles as $role) {
                     $selected = $role === $selectedRole ? 'selected' : '';
-                    echo '<option ' . $selected . ' value="<?= $role ?>">' . $role . '</option>';
+                    echo "<option  $selected  value=\"$role\"> $role </option>";
                 }
                 ?>
             </select>

@@ -3,16 +3,16 @@
 require_once 'connection.php';
 function getConfig($param, $default = null)
 {
-
     $config = require 'config.php';
 
-    return  $config[$param] ?? $default;
+    return $config[$param] ?? $default;
 }
+
 function getParam($param, $default = '')
 {
-
     return $_REQUEST[$param] ?? $default;
 }
+
 function getRandName(): string
 {
     $names = [
@@ -33,45 +33,43 @@ function getRandName(): string
 
     ];
 
-    $rand1 =  random_int(0, count($names) - 1);
-    $rand2 =  random_int(0, count($lastnames) - 1);
+    $rand1 = random_int(0, count($names) - 1);
+    $rand2 = random_int(0, count($lastnames) - 1);
 
-    return  $names[$rand1] . ' ' . $lastnames[$rand2];
+    return $names[$rand1] . ' ' . $lastnames[$rand2];
 }
 
 //echo getRandName();
 function getRandEmail(string $name): string
 {
-
     $domains = ['google.com', 'yahoo.com', 'hotmail.it', 'libero.it'];
 
-    $rand1 =  random_int(0, count($domains) - 1);
+    $rand1 = random_int(0, count($domains) - 1);
 
-    return  strtolower(str_replace(' ', '.', $name) . random_int(10, 99) . '@' . $domains[$rand1]);
+    return strtolower(str_replace(' ', '.', $name) . random_int(10, 99) . '@' . $domains[$rand1]);
 }
+
 function getRandFiscalCode(): string
 {
-
     $i = 16;
     $res = '';  // ABQZ
 
     while ($i > 0) {
-
         $res .= chr(random_int(65, 90));
 
         $i--;
     }
     return $res;
 }
+
 function getRandomAge(): int
 {
     return random_int(0, 120);
 }
+
 function insertRandUser($totale, mysqli $conn): void
 {
-
     while ($totale > 0) {
-
         $username = getRandName();
         $email = getRandEmail($username);
         $fiscalcode = getRandFiscalCode();
@@ -96,7 +94,6 @@ function insertRandUser($totale, mysqli $conn): void
 //insertRandUser(300, getConnection());
 function getUsers(array $params = []): array
 {
-
     /**
      * @var $conn mysqli
      */
@@ -127,7 +124,6 @@ function getUsers(array $params = []): array
     // echo $sql;
     $res = $conn->query($sql);
     if ($res) {
-
         while ($row = $res->fetch_assoc()) {
             $records[] = $row;
         }
@@ -138,7 +134,6 @@ function getUsers(array $params = []): array
 
 function getTotalUserCount(string $search = ''): int
 {
-
     /**
      * @var $conn mysqli
      */
@@ -162,8 +157,7 @@ function getTotalUserCount(string $search = ''): int
     //echo $sql;
     $res = $conn->query($sql);
     if ($res && $row = $res->fetch_assoc()) {
-
-        return (int) $row['total'];
+        return (int)$row['total'];
     }
 
     return 0;
@@ -174,6 +168,7 @@ function dd(mixed ...$data)
     var_dump($data);
     die;
 }
+
 function showSessionMsg()
 {
     if (!empty($_SESSION['message'])) {
@@ -184,10 +179,9 @@ function showSessionMsg()
         require_once 'view/message.php';
     }
 }
+
 function handleAvatarUpload(array $file, ?int $userId = null): ?string
 {
-
-
     $config = require 'config.php';
     $uploadDir = $config['uploadDir'] ?? 'avatar';
     $uploadDirPath = realpath(__DIR__) . '/' . $uploadDir . '/';
@@ -204,6 +198,7 @@ function handleAvatarUpload(array $file, ?int $userId = null): ?string
     $res = move_uploaded_file($file['tmp_name'], $uploadDirPath . $fileName);
     return $res ? $uploadDir . '/' . $fileName : null;
 }
+
 function validateFileUpload(array $file): array
 {
     $errors = [];
@@ -236,19 +231,19 @@ function getUploadError(int $errorCode): string
             $error = 'File size exceeds the allowed limit.';
             break;
         case UPLOAD_ERR_PARTIAL:
-            $error  = 'The file was only partially uploaded.';
+            $error = 'The file was only partially uploaded.';
             break;
         case UPLOAD_ERR_NO_FILE:
-            $error  = 'No file was uploaded.';
+            $error = 'No file was uploaded.';
             break;
         case UPLOAD_ERR_NO_TMP_DIR:
-            $error  = 'Missing temporary folder.';
+            $error = 'Missing temporary folder.';
             break;
         case UPLOAD_ERR_CANT_WRITE:
             $error = 'Failed to write file to disk.';
             break;
         case UPLOAD_ERR_EXTENSION:
-            $error  = 'File upload stopped by extension.';
+            $error = 'File upload stopped by extension.';
             break;
         default:
             $error = 'Unknown file upload error.';
@@ -256,12 +251,14 @@ function getUploadError(int $errorCode): string
     }
     return $error;
 }
+
 function getUploadDir(): string
 {
     $uploadDir = getConfig('uploadDir', 'avatar');
     $uploadDir = realpath(__DIR__) . '/' . trim($uploadDir, '/') . '/';
     return $uploadDir;
 }
+
 function createThumbnailAndIntermediate(string $avatarPath): void
 {
     $config = require 'config.php';
@@ -278,18 +275,8 @@ function createThumbnailAndIntermediate(string $avatarPath): void
 }
 
 
-
-
-
-
-
-
-
-
-
 function resizeImage(string $sourcePath, string $targetPath, int $width, string $mimeType): void
 {
-
     switch ($mimeType) {
         case 'image/jpeg':
             $sourceImage = imagecreatefromjpeg($sourcePath);
@@ -339,24 +326,6 @@ function resizeImage(string $sourcePath, string $targetPath, int $width, string 
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function setFlashMessage(string $message, string $type = 'info')
 {
     $_SESSION['message'] = $message;
@@ -376,6 +345,7 @@ function redirectWithParams(): void
     header('Location:../index.php?' . $queryString);
     exit;
 }
+
 function convertMaxUploadSizeToBytes(): int
 {
     $maxUploadSize = ini_get('upload_max_filesize'); // 2M, 2G
@@ -396,6 +366,7 @@ function convertMaxUploadSizeToBytes(): int
 
     return $number;
 }
+
 function formatBytes(int $bytes): string
 {
     //20970000 
@@ -404,6 +375,7 @@ function formatBytes(int $bytes): string
     $number = round($bytes / 1024 ** $power, 2);
     return $number . ' ' . $units[$power];
 }
+
 function validateUserData(array $data): array
 {
     $errors = [];
@@ -422,8 +394,17 @@ function validateUserData(array $data): array
     if ($data['age'] < 18 || $data['age'] > 120) {
         $errors['age'] = 'Age must be between 18 and 120.';
     }
+    if (!validatePassword($data['password'])) {
+        $errors['password'] = 'Invalid password. it should be at least 6 chars';
+    }
     return $errors;
 }
+
+function validatePassword(string $password): bool
+{
+    return strlen($password) >= 6;
+}
+
 function getImgThumbNail(string $path, string $size = 's'): array
 {
     $imgWidth = getConfig($size === 's' ? 'thumbnailWidth' : 'intermediateWidth', 120);
@@ -433,7 +414,7 @@ function getImgThumbNail(string $path, string $size = 's'): array
     $thumbnail = getConfig('uploadDir', 'avatar')
         . '/' . $fileName;
 
-    $uploadDir  = getUploadDir() . '/' . $fileName;
+    $uploadDir = getUploadDir() . '/' . $fileName;
     if (file_exists($uploadDir)) {
         $fileData['avatar'] = $thumbnail;
         $fileData['width'] = $imgWidth;
@@ -441,6 +422,7 @@ function getImgThumbNail(string $path, string $size = 's'): array
 
     return $fileData;
 }
+
 function deleteUserImages(string $avatarPath): void
 {
     if (!$avatarPath) {

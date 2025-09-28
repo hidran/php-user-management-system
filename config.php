@@ -8,7 +8,7 @@ return [
     'recordsPerPage' => 10,
     'maxLinks' => 10,
     'orderByColumns' =>
-        ['id', 'username', 'fiscalcode', 'age', 'email'],
+        ['id', 'username', 'fiscalcode', 'age', 'email', 'role_type'],
     'recordsPerPageOptions' =>
         [
             5,

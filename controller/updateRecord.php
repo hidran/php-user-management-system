@@ -14,10 +14,8 @@ switch ($action) {
         }
 
         $res = deleteUser($id);
-        if ($res) {
-            if ($user && $user['avatar']) {
-                deleteUserImages($user['avatar']);
-            }
+        if ($res && $user && $user['avatar']) {
+            deleteUserImages($user['avatar']);
         }
         $message = $res ? 'USER ' . $id . ' DELETED'
             : 'ERROR DELETING USER ' . $id;
@@ -36,7 +34,9 @@ switch ($action) {
             'username' => trim($_POST['username']),
             'email' => trim($_POST['email']),
             'fiscalcode' => trim($_POST['fiscalcode']),
-            'age' => (int)$_POST['age']
+            'age' => (int)$_POST['age'],
+            'role_type' => $_POST['role_type'] ?? 'user',
+            'password' => $_POST['password']
 
         ];
         $errors = validateUserData($userData);
@@ -77,11 +77,12 @@ switch ($action) {
 
 
         $userData = [
-
             'username' => trim($_POST['username']),
             'email' => trim($_POST['email']),
             'fiscalcode' => trim($_POST['fiscalcode']),
             'age' => (int)$_POST['age'],
+            'role_type' => $_POST['role_type'] ?? 'user',
+            'password' => $_POST['password'],
             'avatar' => null
         ];
         $errors = validateUserData($userData);
