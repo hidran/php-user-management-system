@@ -6,11 +6,11 @@
 </footer>
 
 
-<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.2/dist/js/bootstrap.bundle.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/js/bootstrap.bundle.min.js'></script>
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const message = document.getElementById('message');
         if (message) {
             setTimeout(() => {
@@ -18,7 +18,7 @@
 
                 setTimeout(() => {
                     message.style.display = 'none';
-                }, 2000); 
+                }, 2000);
             }, 5000);
 
         }
