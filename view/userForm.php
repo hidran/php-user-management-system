@@ -1,4 +1,5 @@
 <?php
+
 $action = 'store';
 $buttonName = 'SAVE';
 $formTile = 'INSERT USER';
@@ -8,7 +9,6 @@ if ($user && $user['id']) {
     $formTile = 'UPDATE USER';
 }
 foreach ($user as &$value) {
-
     $value = htmlspecialchars($value ?? '');
 }
 ?>
@@ -41,13 +41,36 @@ foreach ($user as &$value) {
             <input id="age" class="form-control" value="<?= $user['age'] ?>" name="age">
         </div>
     </div>
+    <div class='row  mb-3'>
+        <label for='age' class='col-form-label text-end form-label col-sm-4'>Password </label>
+        <div class='col-sm-8'>
+            <input id='password' class='form-control' value="" name='password'>
+        </div>
+    </div>
+    <div class='row  mb-3'>
+        <label for='age' class='col-form-label text-end form-label col-sm-4'>Role type </label>
+        <div class='col-sm-8'>
+            <select id='role_type' class='form-control' value='' name='role_type' required>
+                <option value="">Select role type</option>
+                <?php
+                $roles = getConfig('roleTypes', []);
+                $selectedRole = $user['role_type'] ?? '';
+                foreach ($roles as $role) {
+                    $selected = $role === $selectedRole ? 'selected' : '';
+                    echo '<option ' . $selected . ' value="<?= $role ?>">' . $role . '</option>';
+                }
+                ?>
+            </select>
+        </div>
+    </div>
     <div class="row  mb-3">
         <label for="avatar" class="col-form-label text-end form-label col-sm-4">Avatar </label>
         <div class="col-sm-8">
             <input type="hidden" name="oldAvatar" value="<?= $user['avatar'] ?>">
 
             <input type="hidden" name="MAX_FILE_SIZE" value="<?= getConfig('maxFileSize') ?>">
-            <input type="file" accept="<?= implode(',', getConfig('mimeTypes')) ?>" id="avatar" class="form-control" value="<?= $user['avatar'] ?>" name="avatar">
+            <input type="file" accept="<?= implode(',', getConfig('mimeTypes')) ?>" id="avatar" class="form-control"
+                   value="<?= $user['avatar'] ?>" name="avatar">
         </div>
 
         <div class="row alert alert-info col-sm-8 offset-md-4 mt-3">
@@ -59,12 +82,12 @@ foreach ($user as &$value) {
         <div class="col-sm-8 offset-sm-4">
             <?php
 
-            $fileData = getImgThumbNail($user['avatar'], 'm');
+            $fileData = getImgThumbNail($user['avatar'], 's');
             $avatar = $fileData['avatar'];
 
             ?>
             <img id="preview" src="<?= $fileData['avatar'] ? htmlspecialchars($fileData['avatar']) : '' ?>"
-                style="width:<?= $fileData['width'] ?>px;<?= $fileData['avatar'] ? '' : 'display:none' ?>">
+                 style="width:<?= $fileData['width'] ?>px;<?= $fileData['avatar'] ? '' : 'display:none' ?>">
 
         </div>
     </div>
@@ -74,10 +97,12 @@ foreach ($user as &$value) {
             <button type="submit" class="btn btn-primary"><?= $buttonName ?></button>
 
             <a href="index.php" class="btn btn-secondary">Back to users</a>
-            <?php if ($action === 'update') { ?>
+            <?php
+            if ($action === 'update') { ?>
                 <a href="controller/updateRecord.php?action=delete&id=<?= $user['id'] ?>"
-                    class="btn btn-danger" onclick="return confirm('Are you sure?')">DELETE</a>
-            <?php } ?>
+                   class="btn btn-danger" onclick="return confirm('Are you sure?')">DELETE</a>
+                <?php
+            } ?>
 
         </div>
         <div class="col-sm-3"></div>
@@ -88,11 +113,11 @@ foreach ($user as &$value) {
         const avatar = '<?= $avatar ?>';
         const avatarInput = document.getElementById('avatar');
         const preview = document.getElementById('preview');
-        avatarInput.addEventListener('change', function() {
+        avatarInput.addEventListener('change', function () {
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     preview.src = e.target.result;
                     preview.style.display = '';
                 }

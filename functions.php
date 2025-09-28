@@ -90,7 +90,8 @@ function insertRandUser($totale, mysqli $conn): void
 }
 
 /**
- * @var \Mysqli $mysqli
+ * @param array $params
+ * @return array
  */
 //insertRandUser(300, getConnection());
 function getUsers(array $params = []): array
@@ -365,8 +366,9 @@ function setFlashMessage(string $message, string $type = 'info')
 function redirectWithParams(): void
 {
     $params = $_GET;
-    if (isset($params['id']))
+    if (isset($params['id'])) {
         unset($params['id']);
+    }
     if (isset($params['action'])) {
         unset($params['action']);
     }
@@ -382,13 +384,13 @@ function convertMaxUploadSizeToBytes(): int
 
     switch ($unit) {
         case 'G':
-            $number = $number * (1024 ** 3);
+            $number *= (1024 ** 3);
             break;
         case 'M':
-            $number = $number * (1024 ** 2);
+            $number *= (1024 ** 2);
             break;
         case 'K':
-            $number = $number * 1024;
+            $number *= 1024;
             break;
     }
 
