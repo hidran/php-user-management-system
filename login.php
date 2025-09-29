@@ -1,10 +1,16 @@
 <?php
 
-session_start();
-require_once 'view/top.php';
-require_once 'view/nav-login.php';
+declare(strict_types=1);
+require_once 'includes/session.php';
 require_once 'functions.php';
 require_once 'includes/csrf.php';
+require_once 'includes/acl.php';
+if (is_user_logged_in()) {
+    redirect('../index.php');
+}
+require_once 'view/top.php';
+require_once 'view/nav-login.php';
+
 ?>
 <main class='flex-shrink-0 d-flex justify-content-center align-items-start min-vh-100'>
     <div class='container'>

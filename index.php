@@ -1,11 +1,17 @@
 <?php
 
-session_start();
+require_once 'includes/session.php';
 require_once 'connection.php';
 // for dev purposes
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require_once 'functions.php';
+require_once 'includes/acl.php';
+require_once 'includes/auth.php';
+if (!is_user_logged_in()) {
+    redirect('login.php');
+}
+require_once 'includes/csrf.php';
 $page = $pageUrl = $_SERVER['PHP_SELF'];
 $updateUrl = 'controller/updateRecord.php';
 //records per page
@@ -39,8 +45,13 @@ require_once 'view/nav.php';
         <?php
         showSessionMsg();
         $action = getParam('action');
+        if (in_array($action, ['edit', 'insert']) && !user_can_update()) {
+            setFlashMessage('Unauthorized', 'danger');
+            redirect('index.php');
+        }
         switch ($action) {
             case 'edit':
+
                 require_once 'model/User.php';
                 $id = getParam('id');
                 $user = getUserById($id);

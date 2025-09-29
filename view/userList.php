@@ -87,21 +87,32 @@ $maxLinks = $maxLinks ?? '5';
                 ?>
             </td>
             <td>
-                <div class="row">
-                    <div class="col-6">
-                        <a class="btn btn-success" href="?id=<?= $user['id'] ?>&action=edit&<?= $navParams ?>">
-                            <i class="fa fa-pen"></i>
-                            UPDATE
-                        </a>
+                <?php
+                if (user_can_update()): ?>
+                    <div class="row">
+
+                        <div class="col-6">
+                            <a class="btn btn-success" href="?id=<?= $user['id'] ?>&action=edit&<?= $navParams ?>">
+                                <i class="fa fa-pen"></i>
+                                UPDATE
+                            </a>
+                        </div>
+                        <?php
+                        if (user_can_update()): ?>
+                            <div class="col-6">
+                                <a onclick="return confirm('DELETE USER?')" class="btn btn-danger"
+                                   href="<?= $updateUrl ?>?id=<?= $user['id'] ?>&action=delete&<?= $navParams ?>">
+                                    <i class="fa fa-trash"></i>
+                                    DELETE
+                                </a>
+                            </div>
+                        <?php
+                        endif;
+                        ?>
                     </div>
-                    <div class="col-6">
-                        <a onclick="return confirm('DELETE USER?')" class="btn btn-danger"
-                           href="<?= $updateUrl ?>?id=<?= $user['id'] ?>&action=delete&<?= $navParams ?>">
-                            <i class="fa fa-trash"></i>
-                            DELETE
-                        </a>
-                    </div>
-                </div>
+                <?php
+                endif;
+                ?>
             </td>
         </tr>
 
