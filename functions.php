@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 require_once 'connection.php';
 function getConfig($param, $default = null)
 {
@@ -8,9 +9,47 @@ function getConfig($param, $default = null)
     return $config[$param] ?? $default;
 }
 
-function getParam($param, $default = '')
+function getParam(string $param, string $default = ''): string
 {
     return $_REQUEST[$param] ?? $default;
+}
+
+function getPostParam($param, $default = ''): string
+{
+    return $_POST[$param] ?? $default;
+}
+
+function post_string(string $key, $max = 255): string
+{
+    $v = trim($_POST[$key] ?? '');
+    return mb_substr($v, 0, $max);
+}
+
+function cleanEmail(string $email = ''): string
+{
+    $email = post_string($email, 254);
+    $filterEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
+    if (!$filterEmail) {
+        $email = '';
+    }
+    return $email;
+}
+
+function verifyEmail(string $email = ''): bool
+{
+    if (!$email) {
+        return false;
+    }
+    return (bool)filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+
+function validateUserName(string $username): bool
+{
+    if (!$username) {
+        return false;
+    }
+    $length = getParam('minUserNameLength');
+    return mb_strlen($username) >= $length;
 }
 
 function getRandName(): string
@@ -211,7 +250,7 @@ function validateFileUpload(array $file): array
 
     $fileinfo = new finfo(FILEINFO_MIME_TYPE);
     $mimeType = $fileinfo->file($file['tmp_name']);
-    if (!in_array($mimeType, $config['mimeTyped'] ?? ['image/jpeg'])) {
+    if (!in_array($mimeType, $config['mimeTyped'] ?? ['image/jpeg'], false)) {
         $errors[] = 'Invalid file type.Allowed types: ' . implode(',', $config['mimeTypes']);
     }
     if ($file['size'] > $config['maxFileSize']) {
@@ -292,7 +331,7 @@ function resizeImage(string $sourcePath, string $targetPath, int $width, string 
     }
     $originalWidth = imagesx($sourceImage);
     $originalHeight = imagesy($sourceImage); // 2000 * 120/3000
-    $newHeight = floor($originalHeight * ($width / $originalWidth));
+    $newHeight = (int)floor($originalHeight * ($width / $originalWidth));
     $newImage = imagecreatetruecolor($width, $newHeight);
     imagecopyresampled(
         $newImage,
@@ -326,13 +365,13 @@ function resizeImage(string $sourcePath, string $targetPath, int $width, string 
 }
 
 
-function setFlashMessage(string $message, string $type = 'info')
+function setFlashMessage(string $message, string $type = 'info'): void
 {
     $_SESSION['message'] = $message;
     $_SESSION['messageType'] = $type;
 }
 
-function redirectWithParams(): void
+function redirectWithParams(): never
 {
     $params = $_GET;
     if (isset($params['id'])) {
@@ -343,6 +382,12 @@ function redirectWithParams(): void
     }
     $queryString = http_build_query($params);
     header('Location:../index.php?' . $queryString);
+    exit;
+}
+
+function redirect(string $url = '/'): never
+{
+    header("Location:$url");
     exit;
 }
 
@@ -365,6 +410,20 @@ function convertMaxUploadSizeToBytes(): int
     }
 
     return $number;
+}
+
+function find_user_by_email(mysqli $conn, string $email): ?array
+{
+    $sql = 'SELECT * FROM users WHERE email = ? LIMIT 1';
+    $st = $conn->prepare($sql);
+    $st->bind_param('s', $email);
+    if (!$st->execute()) {
+        return null;
+    }
+    $row = $st->get_result()->fetch_assoc();
+
+    $st->close();
+    return $row;
 }
 
 function formatBytes(int $bytes): string

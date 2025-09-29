@@ -23,5 +23,6 @@ return [
     'maxFileSize' => convertMaxUploadSizeToBytes(),
     'thumbnailWidth' => 120,
     'intermediateWidth' => 800,
-    'roleTypes' => ['user', 'admin', 'editor']
+    'roleTypes' => ['user', 'admin', 'editor'],
+    'minUserNameLength' => 4
 ];

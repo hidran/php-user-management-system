@@ -1,5 +1,11 @@
 <?php
 
+declare(strict_types=1);
+$orderBy = $orderBy ?? 'ASC';
+$recordsPerPage = $recordsPerPage ?? 10;
+$search = $search ?? '';
+$currentPage = $currentPage ?? 1;
+$currentOrderDir = $currentOrderDir ?? 'DESC';
 $params = [
     'orderBy' => $orderBy,
     'recordsPerPage' => $recordsPerPage,
