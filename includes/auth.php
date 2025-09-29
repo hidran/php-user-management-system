@@ -8,10 +8,14 @@ function start_session(array $user): void
     $_SESSION['user_logged_in'] = true;
 }
 
-function verify_login(mysqli $conn, string $email, string $password): array
+function verify_login(mysqli $conn, string $email, string $password, string $token): array
 {
     $res = ['success' => true, 'message' => ''];
-
+    if (!csrf_validate($token)) {
+        $res['success'] = false;
+        $res['message'] = 'Invalid token';
+        return $res;
+    }
     if (!validatePassword($password) || !verifyEmail($email)) {
         $res['success'] = false;
         $res['message'] = 'Invalid email or password';
@@ -40,9 +44,14 @@ function update_password_hash(mysqli $conn, int $id, string $password_hash): voi
     $st->close();
 }
 
-function verify_signup(mysqli $conn, string $email, string $password, $username): array
+function verify_signup(mysqli $conn, string $email, string $password, $username, string $token): array
 {
     $res = ['success' => true, 'message' => ''];
+    if (!csrf_validate($token)) {
+        $res['success'] = false;
+        $res['message'] = 'Invalid token';
+        return $res;
+    }
     if (!validateUserName($username)) {
         $res['success'] = false;
         $res['message'] = 'Invalid user name';

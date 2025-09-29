@@ -4,6 +4,7 @@ session_start();
 require_once 'view/top.php';
 require_once 'view/nav-login.php';
 require_once 'functions.php';
+require_once 'includes/csrf.php';
 ?>
 <main class='flex-shrink-0 d-flex justify-content-center align-items-start min-vh-100'>
     <div class='container'>
@@ -48,6 +49,7 @@ require_once 'functions.php';
                                 <h1 class='h4 mb-3 card-title text-center'>Login</h1>
                                 <form action='controller/login.php' method='post' novalidate>
                                     <div class='mb-3'>
+                                        <?= csrf_field() ?>
                                         <label for='email' class='form-label'>Email address</label>
                                         <input type='email' class='form-control' id='email' name='email'
                                                aria-describedby='emailHelp' required>
@@ -81,6 +83,7 @@ require_once 'functions.php';
                                 <h2 class="h4 mb-3 card-title text-center">Signup</h2>
                                 <form action="controller/signup.php" method="post">
                                     <div class='mb-3'>
+                                        <?= csrf_field() ?>
                                         <label for='username' class='form-label'>User name</label>
                                         <input type='text' class='form-control' name='username' id='username'
                                                required minlength='<?= getConfig('minUserNameLength') ?>'>
