@@ -8,6 +8,31 @@ function start_session(array $user): void
     $_SESSION['user_logged_in'] = true;
 }
 
+function base64url_encode(string $bin): string
+{
+    $res = base64_encode($bin);
+    $res = strtr($res, '+/', '-_');
+    $res = rtrim($res, '=');
+    return $res;
+}
+
+function saveRememberMe(mysqli $conn, int $userId): bool
+{
+    $selector = base64url_encode(random_bytes(12));
+    $token = base64url_encode(random_bytes(33));
+    $tokenHash = hash('sha256', $token);
+    $ttl = getConfig('rememberMeTTL');
+    $expiresAt = (new DateTimeImmutable('+' . $ttl . ' seconds'))->format('Y-m-d H:i:s');
+    $ip = $_SERVER['REMOTE_ADDR'];
+
+    $sql = 'INSERT INTO remember_tokens (user_id, token_hash, selector, expires_at, ip_address) VALUES (?,?,?,?,?)';
+    $st = $conn->prepare($sql);
+    $st->bind_param('issss', $userId, $tokenHash, $selector, $expiresAt, $ip);
+    $res = $st->execute();
+    $st->close();
+    return $res;
+}
+
 function verify_login(mysqli $conn, string $email, string $password, string $token): array
 {
     $res = ['success' => true, 'message' => ''];

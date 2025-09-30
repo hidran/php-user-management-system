@@ -11,7 +11,7 @@ $currentOrderDir = $currentOrderDir ?? 'ASC';
 ?>
 <header>
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark p-2">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <i class="fa-solid fa-user fa-lg"></i>
@@ -38,13 +38,13 @@ $currentOrderDir = $currentOrderDir ?? 'ASC';
                     <form method="GET" role="search" name="searchForm" id="searchForm">
                         <div class="row">
                             <div class="col-2">
-                                <div class="row d-flex justify-content-center  align-content-center">
-
+                                <!-- <div class="row d-flex justify-content-center  align-content-center">-->
+                                <div class='row g-2 align-items-center'>
                                     <div class="col-md-6">
                                         <label class="form-label  text-bg-dark mt-2" for="orderBy"> Order by</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <select class="form-select" name="orderBy" id="orderBy"
+                                        <select class="form-select form-select-sm" name="orderBy" id="orderBy"
                                                 onchange="document.forms.searchForm.submit()">
                                             <option value="">SELECT</option>
                                             <?php
@@ -116,22 +116,28 @@ $currentOrderDir = $currentOrderDir ?? 'ASC';
                     <?php
                     $username = get_user_login_data()['username'];
                     ?>
-                    <ul class="navbar-nav me-auto mb-2 mb-navbar">
+                    <!--<ul class='navbar-nav me-auto mb-2 mb-navbar'>-->
+                    <ul class='navbar-nav ms-auto mb-2 mb-md-0'>
                         <li class="nav-item dropdown">
-                            <a id="userMenu" data-bs-toggle="dropdown" aria-expanded="false" role="button"
+                            <a id="userMenu" href='#' data-bs-toggle="dropdown" aria-expanded="false" role="button"
                                class="nav-link dropdown-toggle"><?= $username ?></a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                                <li><a class='dropdown-item' href='/profile.php'>Profile</a></li>
+                            <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="userMenu">
+                                <li>
+                                    <a role="button" class='btn btn-outline-success btn-sm w-100'
+                                       href='/profile.php'>Profile</a>
+                                </li>
                                 <li>
                                     <hr class='dropdown-divider'>
                                 </li>
                                 <li>
                                     <form action="controller/logout.php" method="post">
                                         <?= csrf_field() ?>
-                                        <button class="btn btn-outline-danger w-100" type="submit">Logout</button>
+                                        <button class="btn btn-outline-danger btn-sm w-100" type="submit">Logout
+                                        </button>
                                     </form>
                                 </li>
                             </ul>
+
                         </li>
                     </ul>
                 <?php

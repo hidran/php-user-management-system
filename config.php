@@ -24,5 +24,6 @@ return [
     'thumbnailWidth' => 120,
     'intermediateWidth' => 800,
     'roleTypes' => ['user', 'admin', 'editor'],
-    'minUserNameLength' => 4
+    'minUserNameLength' => 4,
+    'rememberMeTTL' => 60 * 60 * 24 * 30
 ];

@@ -9,7 +9,7 @@ if (is_user_logged_in()) {
     redirect('../index.php');
 }
 require_once 'view/top.php';
-require_once 'view/nav-login.php';
+require_once 'view/nav.php';
 
 ?>
 <main class='flex-shrink-0 d-flex justify-content-center align-items-start min-vh-100'>

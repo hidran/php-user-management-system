@@ -1,6 +1,7 @@
 body {
     font-family: 'Noto Sans', Georgia, Helvetica, sans-serif;
 }
+
 i.fa-solid {
     margin-right: 5px;
 }
@@ -12,6 +13,7 @@ i.fa-solid {
     font-weight: bold;
     padding: 3px;
 }
+
 .table thead th.DESC:after {
     content: '↓';
 }
@@ -19,8 +21,13 @@ i.fa-solid {
 a.disabled {
     background-color: blue;
 }
+
 .fade-out {
     opacity: 0;
 
     transition: opacity 2s ease-out;
+}
+
+.navbar .form-label {
+    margin-bottom: 0;
 }
