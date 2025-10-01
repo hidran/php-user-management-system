@@ -52,8 +52,65 @@ function tryAutoLogin(): void
         'role_type' => $row['role_type'],
     ];
     $_SESSION['user_logged_in'] = true;
-    //rotateRememberToken($row['id']);
+    rotateRememberToken($conn, $row['id']);
 }
+
+function rotateRememberToken(mysqli $conn, int $id): void
+{
+    $token = base64url_encode(random_bytes(33));
+    $tokenHash = hash('sha256', $token);
+    $ttl = getConfig('rememberMeTTL');
+    $expiresAt = (new DateTimeImmutable('+' . $ttl . ' seconds'))->format('Y-m-d H:i:s');
+    $sql = 'SELECT selector FROM remember_tokens WHERE id=?';
+    $st = $conn->prepare($sql);
+    $st->bind_param('i', $id);
+    $res = $st->execute();
+    if (!$res) {
+        return;
+    }
+    $row = $st->get_result()->fetch_assoc();
+    $selector = $row['selector'];
+    $sql = 'UPDATE remember_tokens SET token_hash=?, expires_at=? WHERE id=?';
+    $st = $conn->prepare($sql);
+    $st->bind_param('sss', $tokenHash, $expiresAt, $id);
+    $st->execute();
+    $st->close();
+    $newToken = $selector . ':' . $token;
+    $cookieName = getConfig('rememberMeCookieName');
+    $cookieOptions = getRememberCookieOpts();
+    setcookie($cookieName, $newToken, $cookieOptions);
+}
+
+function revokeAllRememberMeTokens(int $userId): void
+{
+    $conn = getConnection();
+    $st = $conn->prepare('DELETE FROM remember_tokens WHERE user_id=?');
+    $st->bind_param('i', $userId);
+    $st->execute();
+    $st->close();
+}
+
+function getCookieRememberMeSelector(): string
+{
+    $cookieName = getConfig('rememberMeCookieName');
+    $cookie = $_COOKIE[$cookieName] ?? '';
+    if (!$cookie || !str_contains($cookie, ':')) {
+        return '';
+    }
+    [$selector,] = explode(':', $cookie);
+    return $selector;
+}
+
+function revokeDeviceRememberMeToken(int $userId): void
+{
+    $conn = getConnection();
+    $st = $conn->prepare('DELETE FROM remember_tokens WHERE user_id=? and selector=?');
+    $selector = getCookieRememberMeSelector();
+    $st->bind_param('is', $userId, $selector);
+    $st->execute();
+    $st->close();
+}
+
 
 function deleteRememberTokenById(int $id): void
 {
@@ -104,10 +161,10 @@ function saveRememberMe(mysqli $conn, int $userId): bool
     $ttl = getConfig('rememberMeTTL');
     $expiresAt = (new DateTimeImmutable('+' . $ttl . ' seconds'))->format('Y-m-d H:i:s');
     $ip = $_SERVER['REMOTE_ADDR'];
-
-    $sql = 'INSERT INTO remember_tokens (user_id, token_hash, selector, expires_at, ip_address) VALUES (?,?,?,?,?)';
+    $userAgent = mb_substr($_SERVER['HTTP_USER_AGENT'], 0, 255);
+    $sql = 'INSERT INTO remember_tokens (user_id, token_hash, selector, expires_at, ip_address, user_agent) VALUES (?,?,?,?,?,?)';
     $st = $conn->prepare($sql);
-    $st->bind_param('issss', $userId, $tokenHash, $selector, $expiresAt, $ip);
+    $st->bind_param('isssss', $userId, $tokenHash, $selector, $expiresAt, $ip, $userAgent);
     $res = $st->execute();
     $st->close();
     if (!$res) {

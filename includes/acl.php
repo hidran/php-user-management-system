@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 const ROLE_USER = 'user';
 const ROLE_ADMIN = 'admin';
 const ROLE_EDITOR = 'editor';
@@ -7,6 +9,12 @@ const ROLE_EDITOR = 'editor';
 function is_user_logged_in(): bool
 {
     return !empty($_SESSION['user_logged_in']);
+}
+
+function get_user_id(): int
+{
+    $id = get_user_login_data()['id'];
+    return (int)($id);
 }
 
 function get_user_login_data(): array

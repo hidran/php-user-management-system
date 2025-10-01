@@ -136,6 +136,15 @@ $currentOrderDir = $currentOrderDir ?? 'ASC';
                                         </button>
                                     </form>
                                 </li>
+                                <li>
+                                    <form action='controller/logout.php' method='post'>
+                                        <input type="hidden" name="fromAll" value="1">
+                                        <?= csrf_field() ?>
+                                        <button class="btn btn-outline-danger btn-sm w-100" type="submit">Logout from
+                                            everywhere
+                                        </button>
+                                    </form>
+                                </li>
                             </ul>
 
                         </li>
