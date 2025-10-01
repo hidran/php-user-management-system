@@ -8,12 +8,92 @@ function start_session(array $user): void
     $_SESSION['user_logged_in'] = true;
 }
 
+function tryAutoLogin(): void
+{
+    if (!empty($_SESSION['user_logged_in'])) {
+        return;
+    }
+    $cookieName = getConfig('rememberMeCookieName');
+
+    $cookie = $_COOKIE[$cookieName] ?? '';
+
+    if (!$cookie || !str_contains($cookie, ':')) {
+        return;
+    }
+    [$selector, $token] = explode(':', $cookie);
+
+    $conn = getConnection();
+    $st = $conn->prepare(
+        'SELECT  t.id,t.expires_at,t.token_hash, u.id as uid, u.email, u.username, u.role_type FROM remember_tokens as t INNER JOIN users as u ON t.user_id=u.id WHERE selector=?'
+    );
+    $st->bind_param('s', $selector);
+    $res = $st->execute();
+    if (!$res) {
+        $st->close();
+        clearRememberMe();
+        return;
+    }
+    $row = $st->get_result()->fetch_assoc();
+    if (new DateTimeImmutable($row['expires_at']) <= new DateTimeImmutable('now')) {
+        deleteRememberTokenById($row['id']);
+        clearRememberMe();
+    }
+    $calcHash = hash('sha256', $token);
+    if (!hash_equals($row['token_hash'], $calcHash)) {
+        deleteRememberTokenById($row['id']);
+        clearRememberMe();
+        return;
+    }
+    session_regenerate_id(true);
+    $_SESSION['user_data'] = [
+        'id' => (int)$row['uid'],
+        'email' => $row['email'],
+        'username' => $row['username'],
+        'role_type' => $row['role_type'],
+    ];
+    $_SESSION['user_logged_in'] = true;
+    //rotateRememberToken($row['id']);
+}
+
+function deleteRememberTokenById(int $id): void
+{
+    $conn = getConnection();
+    $st = $conn->prepare('DELETE FROM remember_tokens WHERE id=?');
+    $st->bind_param('i', $id);
+    $st->execute();
+    $st->close();
+}
+
+function clearRememberMe(): void
+{
+    $cookieName = getConfig('rememberMeCookieName');
+    $cookieOptions = getRememberCookieOpts();
+    $cookieOptions['expires'] = time() - 3600;
+    setcookie($cookieName, '', $cookieOptions);
+}
+
 function base64url_encode(string $bin): string
 {
     $res = base64_encode($bin);
     $res = strtr($res, '+/', '-_');
     $res = rtrim($res, '=');
     return $res;
+}
+
+function getRememberCookieOpts(): array
+{
+    $ttl = getConfig('rememberMeTTL');
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+
+    return [
+
+        'expires' => time() + $ttl,
+        'path' => '/',
+        'domain' => '',
+        'secure' => $secure,
+        'httponly' => true,
+        'samesite' => 'Strict'
+    ];
 }
 
 function saveRememberMe(mysqli $conn, int $userId): bool
@@ -30,6 +110,15 @@ function saveRememberMe(mysqli $conn, int $userId): bool
     $st->bind_param('issss', $userId, $tokenHash, $selector, $expiresAt, $ip);
     $res = $st->execute();
     $st->close();
+    if (!$res) {
+        return false;
+    }
+    $value = $selector . ':' . $token;
+    $cookieName = getConfig('rememberMeCookieName');
+
+    $cookieOptions = getRememberCookieOpts();
+    setcookie($cookieName, $value, $cookieOptions);
+
     return $res;
 }
 

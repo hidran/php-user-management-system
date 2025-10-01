@@ -25,5 +25,6 @@ return [
     'intermediateWidth' => 800,
     'roleTypes' => ['user', 'admin', 'editor'],
     'minUserNameLength' => 4,
-    'rememberMeTTL' => 60 * 60 * 24 * 30
+    'rememberMeTTL' => 60 * 60 * 24 * 30,
+    'rememberMeCookieName' => 'ums_remember_token'
 ];
